@@ -1,0 +1,133 @@
+/*=========================================================
+OREGANO 790
+TYPOGRAPHY
+Canonical Build v0.2
+=========================================================*/
+
+/*---------------------------------------------------------
+BODY
+---------------------------------------------------------*/
+
+body{
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    line-height:1.7;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+}
+
+/*---------------------------------------------------------
+HEADINGS
+---------------------------------------------------------*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin:0;
+}
+
+h1{
+    font-size:clamp(4rem,8vw,7rem);
+}
+
+h2{
+    font-size:clamp(3rem,6vw,5rem);
+}
+
+h3{
+    font-size:2rem;
+}
+
+h4{
+    font-size:1.5rem;
+}
+
+h5{
+    font-size:1.25rem;
+}
+
+h6{
+    font-size:1rem;
+}
+
+/*---------------------------------------------------------
+PARAGRAPHS
+---------------------------------------------------------*/
+
+p{
+    margin:0;
+    line-height:1.8;
+    font-size:1rem;
+}
+
+/*---------------------------------------------------------
+LINKS
+---------------------------------------------------------*/
+
+a{
+    text-decoration:none;
+    color:inherit;
+    transition:.3s ease;
+}
+
+/*---------------------------------------------------------
+SMALL TEXT
+---------------------------------------------------------*/
+
+small{
+    font-size:.75rem;
+    letter-spacing:.2em;
+}
+
+/*---------------------------------------------------------
+TEXT UTILITIES
+---------------------------------------------------------*/
+
+.text-center{
+    text-align:center;
+}
+
+.text-left{
+    text-align:left;
+}
+
+.text-right{
+    text-align:right;
+}
+
+.uppercase{
+    text-transform:uppercase;
+}
+
+.capitalize{
+    text-transform:capitalize;
+}
+
+.font-light{
+    font-weight:300;
+}
+
+.font-regular{
+    font-weight:400;
+}
+
+.font-medium{
+    font-weight:500;
+}
+
+.font-semibold{
+    font-weight:600;
+}
+
+.font-bold{
+    font-weight:700;
+}

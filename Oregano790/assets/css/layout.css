@@ -1,0 +1,231 @@
+/*=========================================================
+OREGANO 790
+LAYOUT
+Canonical Build v0.2
+=========================================================*/
+
+/*=========================================================
+ROOT LAYOUT
+=========================================================*/
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
+main{
+    position:relative;
+    width:100%;
+}
+
+/*=========================================================
+CONTAINERS
+=========================================================*/
+
+.container{
+    width:min(92%,1400px);
+    margin-inline:auto;
+}
+
+.container-wide{
+    width:min(96%,1700px);
+    margin-inline:auto;
+}
+
+.container-narrow{
+    width:min(90%,900px);
+    margin-inline:auto;
+}
+
+/*=========================================================
+SECTIONS
+=========================================================*/
+
+section{
+    position:relative;
+    width:100%;
+    padding:7rem 0;
+}
+
+.section-sm{
+    padding:4rem 0;
+}
+
+.section-lg{
+    padding:10rem 0;
+}
+
+.section-xl{
+    padding:12rem 0;
+}
+
+/*=========================================================
+DISPLAY HELPERS
+=========================================================*/
+
+.flex{
+    display:flex;
+}
+
+.inline-flex{
+    display:inline-flex;
+}
+
+.grid{
+    display:grid;
+}
+
+.block{
+    display:block;
+}
+
+.hidden{
+    display:none;
+}
+
+/*=========================================================
+FLEX UTILITIES
+=========================================================*/
+
+.flex-column{
+    flex-direction:column;
+}
+
+.flex-wrap{
+    flex-wrap:wrap;
+}
+
+.justify-start{
+    justify-content:flex-start;
+}
+
+.justify-center{
+    justify-content:center;
+}
+
+.justify-between{
+    justify-content:space-between;
+}
+
+.justify-end{
+    justify-content:flex-end;
+}
+
+.align-start{
+    align-items:flex-start;
+}
+
+.align-center{
+    align-items:center;
+}
+
+.align-end{
+    align-items:flex-end;
+}
+
+/*=========================================================
+GRID UTILITIES
+=========================================================*/
+
+.grid-2{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:2rem;
+}
+
+.grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2rem;
+}
+
+.grid-4{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:2rem;
+}
+
+/*=========================================================
+SPACING UTILITIES
+=========================================================*/
+
+.gap-xs{
+    gap:.5rem;
+}
+
+.gap-sm{
+    gap:1rem;
+}
+
+.gap-md{
+    gap:2rem;
+}
+
+.gap-lg{
+    gap:3rem;
+}
+
+.gap-xl{
+    gap:5rem;
+}
+
+/*=========================================================
+WIDTH UTILITIES
+=========================================================*/
+
+.w-100{
+    width:100%;
+}
+
+.h-100{
+    height:100%;
+}
+
+/*=========================================================
+POSITION UTILITIES
+=========================================================*/
+
+.relative{
+    position:relative;
+}
+
+.absolute{
+    position:absolute;
+}
+
+.fixed{
+    position:fixed;
+}
+
+/*=========================================================
+OVERFLOW
+=========================================================*/
+
+.overflow-hidden{
+    overflow:hidden;
+}
+
+.overflow-auto{
+    overflow:auto;
+}
+
+/*=========================================================
+Z-INDEX
+=========================================================*/
+
+.z-1{
+    z-index:1;
+}
+
+.z-10{
+    z-index:10;
+}
+
+.z-100{
+    z-index:100;
+}
+
+.z-1000{
+    z-index:1000;
+}

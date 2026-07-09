@@ -1,0 +1,3329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         OREGANO 790
+         Premium Members Cannabis Boutique
+         Canonical Build — v0.1
+         Single source of truth. All prior build stages
+         have been consolidated into this file.
+    ====================================================== -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OREGANO 790 | Premium Members Boutique</title>
+
+    <meta name="description"
+        content="Premium Members Cannabis Boutique Presentation">
+
+    <meta name="theme-color" content="#0E0E0E">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        /*
+        ======================================================
+        OREGANO 790
+        CANONICAL STYLESHEET
+
+        01 FOUNDATION
+        02 TYPOGRAPHY & SECTION HEADINGS
+        03 BUTTONS
+        04 HEADER
+        05 ANNOUNCEMENT BAR
+        06 HERO
+        07 FEATURED COLLECTION
+        08 PRODUCT CARD
+        09 CATALOGUE
+        10 ANIMATIONS
+        11 RESPONSIVE
+        ======================================================
+        */
+
+        /*======================================================
+        01 FOUNDATION
+        ======================================================*/
+
+        :root{
+
+            --black:#0E0E0E;
+            --charcoal:#222222;
+            --white:#FFFFFF;
+            --light:#F5F5F5;
+            --olive:#59624C;
+            --sand:#D8D3C8;
+
+            --transition:.35s ease;
+
+            --container:1280px;
+
+            --radius:18px;
+
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        html{
+            scroll-behavior:smooth;
+        }
+
+        body{
+
+            background:var(--black);
+            color:var(--white);
+
+            font-family:"Inter",sans-serif;
+
+            overflow-x:hidden;
+
+            opacity:0;
+
+            transition:
+                opacity .8s ease,
+                background .35s ease,
+                color .35s ease;
+
+        }
+
+        body.loaded{
+
+            opacity:1;
+
+        }
+
+        body.light{
+
+            background:var(--light);
+
+            color:var(--charcoal);
+
+        }
+
+        img{
+
+            display:block;
+            width:100%;
+
+        }
+
+        a{
+
+            color:inherit;
+            text-decoration:none;
+
+        }
+
+        button{
+
+            cursor:pointer;
+            font-family:inherit;
+
+        }
+
+        section{
+
+            width:100%;
+
+            position:relative;
+
+            opacity:0;
+
+            transform:translateY(60px);
+
+            transition:
+                opacity .9s ease,
+                transform .9s ease;
+
+        }
+
+        section.visible{
+
+            opacity:1;
+
+            transform:translateY(0);
+
+        }
+
+        .container{
+
+            width:min(92%,var(--container));
+
+            margin:auto;
+
+        }
+
+        ::selection{
+
+            background:var(--olive);
+
+            color:white;
+
+        }
+
+        /*======================================================
+        02 TYPOGRAPHY & SECTION HEADINGS
+        ======================================================*/
+
+        h1,h2,h3,h4{
+
+            font-family:"Cormorant Garamond",serif;
+            font-weight:600;
+            letter-spacing:.02em;
+
+        }
+
+        .section-label{
+
+            display:inline-block;
+
+            margin-bottom:24px;
+
+            padding:10px 18px;
+
+            border:1px solid rgba(255,255,255,.08);
+
+            border-radius:999px;
+
+            letter-spacing:.28em;
+
+            font-size:.72rem;
+
+            text-transform:uppercase;
+
+            color:var(--olive);
+
+        }
+
+        body.light .section-label{
+
+            border-color:rgba(0,0,0,.08);
+
+        }
+
+        .section-intro{
+
+            padding:140px 0 110px;
+
+            text-align:center;
+
+        }
+
+        .section-intro h2{
+
+            font-size:clamp(3rem,7vw,5.5rem);
+
+            line-height:1;
+
+            margin-bottom:28px;
+
+        }
+
+        .section-intro p{
+
+            max-width:720px;
+
+            margin:auto;
+
+            line-height:1.9;
+
+            opacity:.72;
+
+            font-size:1.05rem;
+
+        }
+
+        /* Reusable placeholder pattern for sections pending a future
+           build stage (About / Members / Contact). Provides a real
+           scroll anchor so primary navigation remains functional. */
+
+        .section-placeholder{
+
+            padding:120px 0;
+
+            text-align:center;
+
+        }
+
+        .section-placeholder h2{
+
+            font-size:3rem;
+
+            margin-bottom:20px;
+
+        }
+
+        .section-placeholder p{
+
+            opacity:.6;
+
+        }
+
+        /*======================================================
+        03 BUTTONS
+        ======================================================*/
+
+        .btn{
+
+            position:relative;
+
+            overflow:hidden;
+
+            display:inline-flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            min-width:220px;
+
+            padding:18px 34px;
+
+            border-radius:999px;
+
+            font-weight:600;
+
+            transition:.35s ease;
+
+            border:1px solid transparent;
+
+        }
+
+        .btn-primary{
+
+            background:var(--olive);
+
+            color:#fff;
+
+        }
+
+        .btn-primary:hover{
+
+            transform:translateY(-4px);
+
+            box-shadow:0 18px 45px rgba(0,0,0,.35);
+
+        }
+
+        .btn-secondary{
+
+            background:transparent;
+
+            border-color:rgba(255,255,255,.15);
+
+            backdrop-filter:blur(16px);
+
+        }
+
+        body.light .btn-secondary{
+
+            border-color:rgba(0,0,0,.12);
+
+        }
+
+        .btn-secondary:hover{
+
+            background:rgba(255,255,255,.08);
+
+            transform:translateY(-4px);
+
+        }
+
+        body.light .btn-secondary:hover{
+
+            background:rgba(0,0,0,.05);
+
+        }
+
+        .ripple{
+
+            position:absolute;
+
+            width:12px;
+
+            height:12px;
+
+            background:rgba(255,255,255,.4);
+
+            border-radius:50%;
+
+            transform:translate(-50%,-50%);
+
+            animation:ripple .6s linear;
+
+            pointer-events:none;
+
+        }
+
+        /*======================================================
+        04 HEADER
+        ======================================================*/
+
+        .site-header{
+
+            position:fixed;
+
+            top:0;
+
+            left:0;
+
+            width:100%;
+
+            z-index:999;
+
+            transition:.35s ease;
+
+            backdrop-filter:blur(16px);
+
+            background:rgba(15,15,15,.45);
+
+            border-bottom:1px solid rgba(255,255,255,.06);
+
+        }
+
+        body.light .site-header{
+
+            background:rgba(255,255,255,.75);
+
+        }
+
+        .site-header.scrolled{
+
+            padding:0;
+
+            background:rgba(15,15,15,.88);
+
+        }
+
+        .header-inner{
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:space-between;
+
+            min-height:82px;
+
+        }
+
+        .logo{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:16px;
+
+        }
+
+        .logo-mark{
+
+            width:42px;
+
+            height:42px;
+
+            border-radius:50%;
+
+            border:2px solid var(--olive);
+
+        }
+
+        .logo-text span{
+
+            display:block;
+
+            font-size:1.25rem;
+
+            letter-spacing:.28em;
+
+            font-weight:600;
+
+        }
+
+        .logo-text small{
+
+            letter-spacing:.5em;
+
+            opacity:.6;
+
+        }
+
+        .desktop-nav{
+
+            display:flex;
+
+            gap:40px;
+
+        }
+
+        .nav-link{
+
+            position:relative;
+
+            padding:8px 0;
+
+        }
+
+        .nav-link::after{
+
+            content:"";
+
+            position:absolute;
+
+            left:0;
+
+            bottom:-5px;
+
+            width:0;
+
+            height:2px;
+
+            background:var(--olive);
+
+            transition:.3s;
+
+        }
+
+        .nav-link:hover::after,
+
+        .nav-link.active::after{
+
+            width:100%;
+
+        }
+
+        .header-actions{
+
+            display:flex;
+
+            align-items:center;
+
+            gap:12px;
+
+        }
+
+        .icon-btn,
+
+        .theme-toggle{
+
+            width:44px;
+
+            height:44px;
+
+            border-radius:50%;
+
+            border:1px solid rgba(255,255,255,.08);
+
+            background:transparent;
+
+            color:inherit;
+
+            transition:.3s;
+
+            position:relative;
+
+        }
+
+        .icon-btn:hover,
+
+        .theme-toggle:hover{
+
+            background:var(--olive);
+
+            transform:translateY(-2px);
+
+        }
+
+        .cart-count{
+
+            position:absolute;
+
+            top:-4px;
+
+            right:-2px;
+
+            width:18px;
+
+            height:18px;
+
+            border-radius:50%;
+
+            background:var(--olive);
+
+            font-size:11px;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+        }
+
+        .hamburger{
+
+            display:none;
+
+        }
+
+        .mobile-menu{
+
+            display:none;
+
+        }
+
+        /*======================================================
+        05 ANNOUNCEMENT BAR
+        ======================================================*/
+
+        .announcement-bar{
+
+            position:relative;
+
+            width:100%;
+
+            overflow:hidden;
+
+            background:#141414;
+
+            border-top:1px solid rgba(255,255,255,.06);
+
+            border-bottom:1px solid rgba(255,255,255,.06);
+
+            height:56px;
+
+            display:flex;
+
+            align-items:center;
+
+            z-index:20;
+
+        }
+
+        body.light .announcement-bar{
+
+            background:#ffffff;
+
+            border-top:1px solid rgba(0,0,0,.08);
+
+            border-bottom:1px solid rgba(0,0,0,.08);
+
+        }
+
+        .announcement-track{
+
+            display:flex;
+
+            width:max-content;
+
+            animation:announcementScroll 38s linear infinite;
+
+            will-change:transform;
+
+        }
+
+        .announcement-group{
+
+            display:flex;
+
+            align-items:center;
+
+            white-space:nowrap;
+
+            padding-right:80px;
+
+        }
+
+        .announcement-group span{
+
+            font-size:.82rem;
+
+            font-weight:500;
+
+            letter-spacing:.22em;
+
+            text-transform:uppercase;
+
+            color:rgba(255,255,255,.82);
+
+            padding:0 22px;
+
+        }
+
+        body.light .announcement-group span{
+
+            color:#444;
+
+        }
+
+        .divider{
+
+            color:var(--olive) !important;
+
+            font-size:1rem;
+
+            opacity:1;
+
+        }
+
+        .announcement-bar:hover .announcement-track{
+
+            animation-play-state:paused;
+
+        }
+
+        /*======================================================
+        06 HERO
+        ======================================================*/
+
+        .hero{
+
+            position:relative;
+
+            min-height:100vh;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            overflow:hidden;
+
+            isolation:isolate;
+
+        }
+
+        .hero-background{
+
+            position:absolute;
+
+            inset:0;
+
+            z-index:-3;
+
+        }
+
+        .hero-image{
+
+            position:absolute;
+
+            inset:0;
+
+            overflow:hidden;
+
+            will-change:transform;
+
+        }
+
+        .hero-image img{
+
+            width:100%;
+
+            height:100%;
+
+            object-fit:cover;
+
+            object-position:center;
+
+            filter:grayscale(100%) contrast(1.08) brightness(.42);
+
+            transform:scale(1.08);
+
+            transition:transform 8s ease;
+
+        }
+
+        .hero:hover .hero-image img{
+
+            transform:scale(1.12);
+
+        }
+
+        .hero-overlay{
+
+            position:absolute;
+
+            inset:0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(14,14,14,.90) 0%,
+                    rgba(14,14,14,.72) 45%,
+                    rgba(14,14,14,.35) 100%
+                );
+
+            z-index:2;
+
+        }
+
+        body.light .hero-overlay{
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(247,246,242,.92) 0%,
+                    rgba(247,246,242,.75) 45%,
+                    rgba(247,246,242,.40) 100%
+                );
+
+        }
+
+        .hero-content{
+
+            position:relative;
+
+            z-index:10;
+
+            display:flex;
+
+            align-items:center;
+
+            min-height:100vh;
+
+        }
+
+        .hero-copy{
+
+            max-width:720px;
+
+            animation:heroFade 1.2s ease forwards;
+
+        }
+
+        .hero-kicker{
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            margin-bottom:30px;
+
+            padding:10px 18px;
+
+            border:1px solid rgba(255,255,255,.10);
+
+            border-radius:999px;
+
+            backdrop-filter:blur(16px);
+
+            font-size:.75rem;
+
+            letter-spacing:.28em;
+
+            text-transform:uppercase;
+
+            color:var(--sand);
+
+        }
+
+        body.light .hero-kicker{
+
+            color:var(--olive);
+
+            border-color:rgba(0,0,0,.08);
+
+        }
+
+        .hero h1{
+
+            font-size:clamp(4rem,8vw,7rem);
+
+            line-height:.95;
+
+            margin-bottom:32px;
+
+            max-width:700px;
+
+        }
+
+        .hero p{
+
+            max-width:560px;
+
+            font-size:1.15rem;
+
+            line-height:1.9;
+
+            opacity:.82;
+
+            margin-bottom:48px;
+
+        }
+
+        .hero-buttons{
+
+            display:flex;
+
+            gap:20px;
+
+            flex-wrap:wrap;
+
+        }
+
+        .scroll-indicator{
+
+            position:absolute;
+
+            bottom:45px;
+
+            left:50%;
+
+            transform:translateX(-50%);
+
+            display:flex;
+
+            flex-direction:column;
+
+            align-items:center;
+
+            gap:14px;
+
+            opacity:.75;
+
+        }
+
+        .scroll-indicator span{
+
+            width:2px;
+
+            height:70px;
+
+            background:linear-gradient(
+                to bottom,
+                var(--olive),
+                transparent
+            );
+
+            animation:scrollPulse 2s infinite;
+
+        }
+
+        .scroll-indicator small{
+
+            text-transform:uppercase;
+
+            letter-spacing:.3em;
+
+            font-size:.65rem;
+
+        }
+
+        /*======================================================
+        07 FEATURED COLLECTION
+        ======================================================*/
+
+        .featured-showcase{
+
+            padding:160px 0;
+
+            position:relative;
+
+            overflow:hidden;
+
+        }
+
+        .featured-showcase::before{
+
+            content:"";
+
+            position:absolute;
+
+            width:620px;
+
+            height:620px;
+
+            border-radius:50%;
+
+            right:-260px;
+
+            top:-140px;
+
+            background:radial-gradient(
+                rgba(89,98,76,.16),
+                transparent 70%
+            );
+
+            pointer-events:none;
+
+        }
+
+        .featured-showcase::after{
+
+            content:"";
+
+            position:absolute;
+
+            left:-180px;
+
+            bottom:-220px;
+
+            width:500px;
+
+            height:500px;
+
+            border-radius:50%;
+
+            background:
+                radial-gradient(
+                    rgba(89,98,76,.12),
+                    transparent 72%
+                );
+
+            pointer-events:none;
+
+        }
+
+        .showcase-grid{
+
+            display:grid;
+
+            grid-template-columns:1.05fr .95fr;
+
+            gap:90px;
+
+            align-items:center;
+
+        }
+
+        .showcase-image{
+
+            position:relative;
+
+            opacity:0;
+
+            transform:translateY(60px);
+
+            transition:
+                opacity 1s ease,
+                transform 1s ease;
+
+            transition-delay:.10s;
+
+        }
+
+        .showcase-image.visible{
+
+            opacity:1;
+
+            transform:translateY(0);
+
+        }
+
+        .image-frame{
+
+            position:relative;
+
+            border-radius:28px;
+
+            overflow:hidden;
+
+            background:#1b1b1b;
+
+            box-shadow:
+                0 35px 80px rgba(0,0,0,.35);
+
+            transition:
+                transform .7s ease,
+                box-shadow .7s ease;
+
+            animation:floatImage 8s ease-in-out infinite;
+
+        }
+
+        body.light .image-frame{
+
+            background:#ffffff;
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.08);
+
+        }
+
+        .image-frame:hover{
+
+            transform:translateY(-10px);
+
+            box-shadow:
+                0 45px 90px rgba(0,0,0,.35);
+
+        }
+
+        .image-frame img{
+
+            width:100%;
+
+            display:block;
+
+            aspect-ratio:4/5;
+
+            object-fit:cover;
+
+            filter:grayscale(100%);
+
+            transition:
+                transform 1.3s ease,
+                filter .8s ease;
+
+        }
+
+        .image-frame:hover img{
+
+            transform:scale(1.08);
+
+        }
+
+        .showcase-content{
+
+            max-width:560px;
+
+            opacity:0;
+
+            transform:translateY(60px);
+
+            transition:
+                opacity 1s ease,
+                transform 1s ease;
+
+            transition-delay:.30s;
+
+        }
+
+        .showcase-content.visible{
+
+            opacity:1;
+
+            transform:translateY(0);
+
+        }
+
+        .showcase-content h2{
+
+            font-size:clamp(3rem,6vw,5rem);
+
+            line-height:1;
+
+            margin:18px 0 28px;
+
+        }
+
+        .strain-meta{
+
+            display:flex;
+
+            flex-wrap:wrap;
+
+            gap:14px;
+
+            margin-bottom:36px;
+
+        }
+
+        .strain-meta span{
+
+            padding:10px 18px;
+
+            border-radius:999px;
+
+            border:1px solid rgba(255,255,255,.08);
+
+            font-size:.8rem;
+
+            letter-spacing:.08em;
+
+            opacity:.85;
+
+            transition:
+                background .35s ease,
+                transform .35s ease,
+                border-color .35s ease;
+
+        }
+
+        body.light .strain-meta span{
+
+            border-color:rgba(0,0,0,.08);
+
+        }
+
+        .strain-meta span:hover{
+
+            background:var(--olive);
+
+            color:white;
+
+            transform:translateY(-3px);
+
+        }
+
+        .showcase-content p{
+
+            font-size:1.05rem;
+
+            line-height:1.95;
+
+            opacity:.76;
+
+            margin-bottom:40px;
+
+        }
+
+        .price-row{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            margin-bottom:45px;
+
+        }
+
+        .price{
+
+            font-size:2.4rem;
+
+            font-weight:700;
+
+            color:var(--olive);
+
+            transition:
+                color .35s ease,
+                transform .35s ease;
+
+        }
+
+        .showcase-content:hover .price{
+
+            transform:scale(1.04);
+
+        }
+
+        .rating{
+
+            letter-spacing:.35em;
+
+            color:#d7c788;
+
+            font-size:1rem;
+
+        }
+
+        .showcase-actions{
+
+            display:flex;
+
+            gap:18px;
+
+            flex-wrap:wrap;
+
+        }
+
+        .showcase-actions .btn{
+
+            transition:
+                transform .35s ease,
+                box-shadow .35s ease,
+                background .35s ease;
+
+        }
+
+        .showcase-actions .btn:hover{
+
+            transform:translateY(-5px);
+
+        }
+
+        /*======================================================
+        08 PRODUCT CARD
+        ======================================================*/
+
+        .product-card{
+
+            background:#171717;
+
+            border:1px solid rgba(255,255,255,.05);
+
+            border-radius:26px;
+
+            overflow:hidden;
+
+            transition:.45s ease;
+
+        }
+
+        body.light .product-card{
+
+            background:white;
+
+            border-color:rgba(0,0,0,.08);
+
+        }
+
+        .product-card:hover{
+
+            transform:translateY(-12px);
+
+            box-shadow:0 35px 70px rgba(0,0,0,.25);
+
+        }
+
+        .product-image{
+
+            position:relative;
+
+            overflow:hidden;
+
+        }
+
+        .product-image img{
+
+            width:100%;
+
+            aspect-ratio:4/5;
+
+            object-fit:cover;
+
+            filter:grayscale(100%);
+
+            transition:1s ease;
+
+        }
+
+        .product-card:hover img{
+
+            transform:scale(1.08);
+
+        }
+
+        .product-overlay{
+
+            position:absolute;
+
+            inset:0;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            background:rgba(0,0,0,.35);
+
+            opacity:0;
+
+            transition:.35s ease;
+
+        }
+
+        .product-card:hover .product-overlay{
+
+            opacity:1;
+
+        }
+
+        .quick-view{
+
+            padding:14px 28px;
+
+            border:none;
+
+            border-radius:999px;
+
+            background:white;
+
+            color:#111;
+
+            font-weight:600;
+
+        }
+
+        .product-badge{
+
+            position:absolute;
+
+            top:18px;
+
+            left:18px;
+
+            padding:8px 14px;
+
+            border-radius:999px;
+
+            background:var(--olive);
+
+            color:white;
+
+            font-size:.72rem;
+
+            letter-spacing:.12em;
+
+            text-transform:uppercase;
+
+        }
+
+        .product-body{
+
+            padding:30px;
+
+        }
+
+        .product-header{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            margin-bottom:18px;
+
+        }
+
+        .product-header h3{
+
+            font-size:2rem;
+
+        }
+
+        .product-rating{
+
+            color:#d8c27c;
+
+        }
+
+        .product-meta{
+
+            display:flex;
+
+            flex-wrap:wrap;
+
+            gap:10px;
+
+            margin-bottom:24px;
+
+        }
+
+        .product-meta span{
+
+            padding:8px 14px;
+
+            border:1px solid rgba(255,255,255,.08);
+
+            border-radius:999px;
+
+            font-size:.75rem;
+
+        }
+
+        body.light .product-meta span{
+
+            border-color:rgba(0,0,0,.08);
+
+        }
+
+        .product-body p{
+
+            line-height:1.8;
+
+            opacity:.75;
+
+            margin-bottom:28px;
+
+        }
+
+        .product-footer{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+        }
+
+        .product-price{
+
+            font-size:2rem;
+
+            font-weight:700;
+
+            color:var(--olive);
+
+        }
+
+        .add-cart{
+
+            padding:14px 24px;
+
+            border:none;
+
+            border-radius:999px;
+
+            background:var(--olive);
+
+            color:white;
+
+            transition:.35s ease;
+
+        }
+
+        .add-cart:hover{
+
+            transform:translateY(-3px);
+
+        }
+
+        /*======================================================
+        09 CATALOGUE
+        ======================================================*/
+
+        .product-catalogue{
+
+            padding:90px 0 150px;
+
+        }
+
+        .catalogue-toolbar{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            gap:40px;
+
+            flex-wrap:wrap;
+
+            margin-bottom:60px;
+
+        }
+
+        .catalogue-results{
+
+            font-size:.9rem;
+
+            letter-spacing:.16em;
+
+            text-transform:uppercase;
+
+            opacity:.65;
+
+        }
+
+        .catalogue-filters{
+
+            display:flex;
+
+            gap:14px;
+
+            flex-wrap:wrap;
+
+        }
+
+        .filter-chip{
+
+            padding:12px 22px;
+
+            border-radius:999px;
+
+            border:1px solid rgba(255,255,255,.08);
+
+            background:transparent;
+
+            color:inherit;
+
+            transition:.35s ease;
+
+        }
+
+        body.light .filter-chip{
+
+            border-color:rgba(0,0,0,.08);
+
+        }
+
+        .filter-chip:hover,
+
+        .filter-chip.active{
+
+            background:var(--olive);
+
+            color:white;
+
+        }
+
+        .catalogue-grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(3,1fr);
+
+            gap:34px;
+
+        }
+
+        .catalogue-item.large{
+
+            grid-column:span 2;
+
+            grid-row:span 2;
+
+        }
+
+        .catalogue-footer{
+
+            margin-top:70px;
+
+            text-align:center;
+
+        }
+
+        /*======================================================
+        10 ANIMATIONS
+        ======================================================*/
+
+        @keyframes heroFade{
+
+            from{
+
+                opacity:0;
+
+                transform:translateY(60px);
+
+            }
+
+            to{
+
+                opacity:1;
+
+                transform:translateY(0);
+
+            }
+
+        }
+
+        @keyframes scrollPulse{
+
+            0%{
+
+                transform:scaleY(.3);
+
+                opacity:.25;
+
+            }
+
+            50%{
+
+                transform:scaleY(1);
+
+                opacity:1;
+
+            }
+
+            100%{
+
+                transform:scaleY(.3);
+
+                opacity:.25;
+
+            }
+
+        }
+
+        @keyframes announcementScroll{
+
+            from{
+
+                transform:translateX(0);
+
+            }
+
+            to{
+
+                transform:translateX(-50%);
+
+            }
+
+        }
+
+        @keyframes ripple{
+
+            from{
+
+                width:10px;
+                height:10px;
+                opacity:.65;
+
+            }
+
+            to{
+
+                width:420px;
+                height:420px;
+                opacity:0;
+
+            }
+
+        }
+
+        @keyframes floatImage{
+
+            0%{
+
+                transform:translateY(0);
+
+            }
+
+            50%{
+
+                transform:translateY(-8px);
+
+            }
+
+            100%{
+
+                transform:translateY(0);
+
+            }
+
+        }
+
+        /*======================================================
+        11 RESPONSIVE
+        ======================================================*/
+
+        @media(max-width:1100px){
+
+            /* Featured Collection */
+
+            .showcase-grid{
+
+                grid-template-columns:1fr;
+
+                gap:60px;
+
+            }
+
+            .showcase-content{
+
+                max-width:100%;
+
+            }
+
+            /* Catalogue */
+
+            .catalogue-grid{
+
+                grid-template-columns:repeat(2,1fr);
+
+            }
+
+            .catalogue-item.large{
+
+                grid-column:span 2;
+
+            }
+
+        }
+
+        @media(max-width:900px){
+
+            /* Hero */
+
+            .hero{
+
+                text-align:center;
+
+            }
+
+            .hero-content{
+
+                justify-content:center;
+
+            }
+
+            .hero-copy{
+
+                max-width:100%;
+
+            }
+
+            .hero-buttons{
+
+                justify-content:center;
+
+            }
+
+            .hero h1{
+
+                font-size:clamp(3rem,12vw,5rem);
+
+            }
+
+            .hero p{
+
+                margin-left:auto;
+
+                margin-right:auto;
+
+            }
+
+        }
+
+        @media(max-width:768px){
+
+            /* Announcement Bar / Section Intro */
+
+            .announcement-bar{
+
+                height:48px;
+
+            }
+
+            .announcement-group span{
+
+                font-size:.7rem;
+
+                letter-spacing:.16em;
+
+                padding:0 16px;
+
+            }
+
+            .section-intro{
+
+                padding:90px 0 70px;
+
+            }
+
+            /* Featured Collection */
+
+            .featured-showcase{
+
+                padding:100px 0;
+
+            }
+
+            .showcase-actions{
+
+                flex-direction:column;
+
+            }
+
+            .showcase-actions .btn{
+
+                width:100%;
+
+            }
+
+            .price-row{
+
+                flex-direction:column;
+
+                align-items:flex-start;
+
+                gap:16px;
+
+            }
+
+            /* Product Card */
+
+            .product-footer{
+
+                flex-direction:column;
+
+                align-items:flex-start;
+
+                gap:20px;
+
+            }
+
+            .add-cart{
+
+                width:100%;
+
+            }
+
+            /* Catalogue */
+
+            .catalogue-toolbar{
+
+                flex-direction:column;
+
+                align-items:flex-start;
+
+            }
+
+            .catalogue-grid{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .catalogue-item.large{
+
+                grid-column:span 1;
+
+                grid-row:auto;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         01 HEADER
+    ====================================================== -->
+
+    <header class="site-header" id="siteHeader">
+
+        <div class="container header-inner">
+
+            <a href="#" class="logo">
+
+                <div class="logo-mark"></div>
+
+                <div class="logo-text">
+                    <span>OREGANO</span>
+                    <small>790</small>
+                </div>
+
+            </a>
+
+            <nav class="desktop-nav">
+
+                <a href="#hero" class="nav-link active">Home</a>
+
+                <a href="#about" class="nav-link">About</a>
+
+                <a href="#strains" class="nav-link">Strains</a>
+
+                <a href="#members" class="nav-link">Members</a>
+
+                <a href="#contact" class="nav-link">Contact</a>
+
+            </nav>
+
+            <div class="header-actions">
+
+                <button class="icon-btn" title="Search">
+                    🔍
+                </button>
+
+                <button class="icon-btn" title="Shopping Cart">
+                    🛒
+                    <span class="cart-count">2</span>
+                </button>
+
+                <button class="icon-btn" title="Member Login">
+                    👤
+                </button>
+
+                <button
+                    class="theme-toggle"
+                    id="themeToggle"
+                    title="Toggle Theme">
+
+                    ☀
+
+                </button>
+
+                <button
+                    class="hamburger"
+                    id="hamburger">
+
+                    ☰
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+
+            <a href="#hero">Home</a>
+
+            <a href="#about">About</a>
+
+            <a href="#strains">Strains</a>
+
+            <a href="#members">Members</a>
+
+            <a href="#contact">Contact</a>
+
+        </div>
+
+    </header>
+
+    <!-- =====================================================
+         02 ANNOUNCEMENT BAR
+    ====================================================== -->
+
+    <section class="announcement-bar">
+
+        <div class="announcement-track">
+
+            <div class="announcement-group">
+
+                <span>FREE DELIVERY ON ORDERS OVER R1000</span>
+
+                <span class="divider">•</span>
+
+                <span>PREMIUM INDOOR FLOWER</span>
+
+                <span class="divider">•</span>
+
+                <span>MEDICAL GRADE</span>
+
+                <span class="divider">•</span>
+
+                <span>MEMBERS ONLY</span>
+
+                <span class="divider">•</span>
+
+                <span>SMALL BATCH CULTIVATION</span>
+
+                <span class="divider">•</span>
+
+                <span>LAB TESTED</span>
+
+                <span class="divider">•</span>
+
+            </div>
+
+            <!-- Duplicate for seamless loop -->
+
+            <div class="announcement-group">
+
+                <span>FREE DELIVERY ON ORDERS OVER R1000</span>
+
+                <span class="divider">•</span>
+
+                <span>PREMIUM INDOOR FLOWER</span>
+
+                <span class="divider">•</span>
+
+                <span>MEDICAL GRADE</span>
+
+                <span class="divider">•</span>
+
+                <span>MEMBERS ONLY</span>
+
+                <span class="divider">•</span>
+
+                <span>SMALL BATCH CULTIVATION</span>
+
+                <span class="divider">•</span>
+
+                <span>LAB TESTED</span>
+
+                <span class="divider">•</span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         03 HERO
+    ====================================================== -->
+
+    <section class="hero" id="hero">
+
+        <!-- Background Layer -->
+
+        <div class="hero-background">
+
+            <div class="hero-overlay"></div>
+
+            <div class="hero-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=1800&q=80"
+                    alt="Premium Cannabis Flower">
+
+            </div>
+
+        </div>
+
+        <!-- Hero Content -->
+
+        <div class="container hero-content">
+
+            <div class="hero-copy">
+
+                <span class="hero-kicker">
+
+                    MEMBERS ONLY COLLECTION
+
+                </span>
+
+                <h1>
+
+                    Premium Cannabis.
+
+                    <br>
+
+                    Curated.
+
+                    <br>
+
+                    For Members.
+
+                </h1>
+
+                <p>
+
+                    A carefully curated collection of premium indoor
+                    flower grown to exceptional standards.
+
+                    Crafted for discerning members who appreciate
+                    quality, consistency and sophistication.
+
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#strains" class="btn btn-primary">
+
+                        Browse Strains
+
+                    </a>
+
+                    <a href="#members" class="btn btn-secondary">
+
+                        Become a Member
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Scroll Indicator -->
+
+        <div class="scroll-indicator">
+
+            <span></span>
+
+            <small>
+
+                Scroll
+
+            </small>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         04 FEATURED COLLECTION — INTRO
+    ====================================================== -->
+
+    <section class="section-intro">
+
+        <div class="container">
+
+            <span class="section-label">
+                Featured Collection
+            </span>
+
+            <h2>
+
+                Curated.
+
+                <br>
+
+                Exceptional.
+
+                <br>
+
+                Consistent.
+
+            </h2>
+
+            <p>
+
+                Discover a carefully selected collection of premium indoor
+                cannabis flower grown for members who value quality over
+                quantity.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         05 FEATURED COLLECTION — SHOWCASE
+    ====================================================== -->
+
+    <section class="featured-showcase" id="featured">
+
+        <div class="container">
+
+            <div class="showcase-grid">
+
+                <!-- LEFT -->
+
+                <div class="showcase-image">
+
+                    <div class="image-frame">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=1400&q=80"
+                            alt="Premium Cannabis Flower">
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT -->
+
+                <div class="showcase-content">
+
+                    <span class="section-label">
+
+                        FEATURED STRAIN
+
+                    </span>
+
+                    <h2>
+
+                        OG Kush
+
+                    </h2>
+
+                    <div class="strain-meta">
+
+                        <span>Indoor Flower</span>
+
+                        <span>THC 26%</span>
+
+                        <span>CBD 0.8%</span>
+
+                    </div>
+
+                    <p>
+
+                        Our flagship indoor cultivar, selected for its
+                        exceptional terpene profile, dense flower structure,
+                        and consistent quality.
+
+                        Carefully cultivated in controlled environments to
+                        deliver a refined experience for discerning members.
+
+                    </p>
+
+                    <div class="price-row">
+
+                        <div class="price">
+
+                            R850
+
+                        </div>
+
+                        <div class="rating">
+
+                            ★★★★★
+
+                        </div>
+
+                    </div>
+
+                    <div class="showcase-actions">
+
+                        <a href="#strains" class="btn btn-primary">
+
+                            Shop Collection
+
+                        </a>
+
+                        <button class="btn btn-secondary">
+
+                            Learn More
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         06 PRODUCT CATALOGUE
+    ====================================================== -->
+
+    <section class="product-catalogue" id="strains">
+
+        <div class="container">
+
+            <!-- Filter Bar -->
+
+            <div class="catalogue-toolbar">
+
+                <div class="catalogue-results">
+
+                    24 Premium Strains Available
+
+                </div>
+
+                <div class="catalogue-filters">
+
+                    <button class="filter-chip active">
+
+                        All
+
+                    </button>
+
+                    <button class="filter-chip">
+
+                        Indoor
+
+                    </button>
+
+                    <button class="filter-chip">
+
+                        Hybrid
+
+                    </button>
+
+                    <button class="filter-chip">
+
+                        Indica
+
+                    </button>
+
+                    <button class="filter-chip">
+
+                        Sativa
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Product Grid -->
+
+            <div class="catalogue-grid">
+
+                <!-- LARGE FEATURE CARD -->
+
+                <div class="catalogue-item large">
+
+                    <article class="product-card">
+
+                        <div class="product-image">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+                                alt="OG Kush">
+
+                            <div class="product-overlay">
+
+                                <button class="quick-view">
+
+                                    Quick View
+
+                                </button>
+
+                            </div>
+
+                            <span class="product-badge">
+
+                                Featured
+
+                            </span>
+
+                        </div>
+
+                        <div class="product-body">
+
+                            <div class="product-header">
+
+                                <h3>
+
+                                    OG Kush
+
+                                </h3>
+
+                                <span class="product-rating">
+
+                                    ★★★★★
+
+                                </span>
+
+                            </div>
+
+                            <div class="product-meta">
+
+                                <span>
+
+                                    THC 26%
+
+                                </span>
+
+                                <span>
+
+                                    CBD 0.8%
+
+                                </span>
+
+                                <span>
+
+                                    Indoor
+
+                                </span>
+
+                            </div>
+
+                            <p>
+
+                                Dense premium flower with earthy pine aromas,
+                                citrus undertones and exceptional consistency.
+
+                            </p>
+
+                            <div class="product-footer">
+
+                                <div class="product-price">
+
+                                    R850
+
+                                </div>
+
+                                <button class="add-cart">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+                <!-- STANDARD -->
+
+                <div class="catalogue-item">
+
+                    <article class="product-card">
+
+                        <div class="product-image">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+                                alt="OG Kush">
+
+                            <div class="product-overlay">
+
+                                <button class="quick-view">
+
+                                    Quick View
+
+                                </button>
+
+                            </div>
+
+                            <span class="product-badge">
+
+                                Featured
+
+                            </span>
+
+                        </div>
+
+                        <div class="product-body">
+
+                            <div class="product-header">
+
+                                <h3>
+
+                                    OG Kush
+
+                                </h3>
+
+                                <span class="product-rating">
+
+                                    ★★★★★
+
+                                </span>
+
+                            </div>
+
+                            <div class="product-meta">
+
+                                <span>
+
+                                    THC 26%
+
+                                </span>
+
+                                <span>
+
+                                    CBD 0.8%
+
+                                </span>
+
+                                <span>
+
+                                    Indoor
+
+                                </span>
+
+                            </div>
+
+                            <p>
+
+                                Dense premium flower with earthy pine aromas,
+                                citrus undertones and exceptional consistency.
+
+                            </p>
+
+                            <div class="product-footer">
+
+                                <div class="product-price">
+
+                                    R850
+
+                                </div>
+
+                                <button class="add-cart">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+                <div class="catalogue-item">
+
+                    <article class="product-card">
+
+                        <div class="product-image">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+                                alt="OG Kush">
+
+                            <div class="product-overlay">
+
+                                <button class="quick-view">
+
+                                    Quick View
+
+                                </button>
+
+                            </div>
+
+                            <span class="product-badge">
+
+                                Featured
+
+                            </span>
+
+                        </div>
+
+                        <div class="product-body">
+
+                            <div class="product-header">
+
+                                <h3>
+
+                                    OG Kush
+
+                                </h3>
+
+                                <span class="product-rating">
+
+                                    ★★★★★
+
+                                </span>
+
+                            </div>
+
+                            <div class="product-meta">
+
+                                <span>
+
+                                    THC 26%
+
+                                </span>
+
+                                <span>
+
+                                    CBD 0.8%
+
+                                </span>
+
+                                <span>
+
+                                    Indoor
+
+                                </span>
+
+                            </div>
+
+                            <p>
+
+                                Dense premium flower with earthy pine aromas,
+                                citrus undertones and exceptional consistency.
+
+                            </p>
+
+                            <div class="product-footer">
+
+                                <div class="product-price">
+
+                                    R850
+
+                                </div>
+
+                                <button class="add-cart">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+                <div class="catalogue-item">
+
+                    <article class="product-card">
+
+                        <div class="product-image">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+                                alt="OG Kush">
+
+                            <div class="product-overlay">
+
+                                <button class="quick-view">
+
+                                    Quick View
+
+                                </button>
+
+                            </div>
+
+                            <span class="product-badge">
+
+                                Featured
+
+                            </span>
+
+                        </div>
+
+                        <div class="product-body">
+
+                            <div class="product-header">
+
+                                <h3>
+
+                                    OG Kush
+
+                                </h3>
+
+                                <span class="product-rating">
+
+                                    ★★★★★
+
+                                </span>
+
+                            </div>
+
+                            <div class="product-meta">
+
+                                <span>
+
+                                    THC 26%
+
+                                </span>
+
+                                <span>
+
+                                    CBD 0.8%
+
+                                </span>
+
+                                <span>
+
+                                    Indoor
+
+                                </span>
+
+                            </div>
+
+                            <p>
+
+                                Dense premium flower with earthy pine aromas,
+                                citrus undertones and exceptional consistency.
+
+                            </p>
+
+                            <div class="product-footer">
+
+                                <div class="product-price">
+
+                                    R850
+
+                                </div>
+
+                                <button class="add-cart">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+                <div class="catalogue-item">
+
+                    <article class="product-card">
+
+                        <div class="product-image">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+                                alt="OG Kush">
+
+                            <div class="product-overlay">
+
+                                <button class="quick-view">
+
+                                    Quick View
+
+                                </button>
+
+                            </div>
+
+                            <span class="product-badge">
+
+                                Featured
+
+                            </span>
+
+                        </div>
+
+                        <div class="product-body">
+
+                            <div class="product-header">
+
+                                <h3>
+
+                                    OG Kush
+
+                                </h3>
+
+                                <span class="product-rating">
+
+                                    ★★★★★
+
+                                </span>
+
+                            </div>
+
+                            <div class="product-meta">
+
+                                <span>
+
+                                    THC 26%
+
+                                </span>
+
+                                <span>
+
+                                    CBD 0.8%
+
+                                </span>
+
+                                <span>
+
+                                    Indoor
+
+                                </span>
+
+                            </div>
+
+                            <p>
+
+                                Dense premium flower with earthy pine aromas,
+                                citrus undertones and exceptional consistency.
+
+                            </p>
+
+                            <div class="product-footer">
+
+                                <div class="product-price">
+
+                                    R850
+
+                                </div>
+
+                                <button class="add-cart">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+                <div class="catalogue-item">
+
+                    <article class="product-card">
+
+                        <div class="product-image">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+                                alt="OG Kush">
+
+                            <div class="product-overlay">
+
+                                <button class="quick-view">
+
+                                    Quick View
+
+                                </button>
+
+                            </div>
+
+                            <span class="product-badge">
+
+                                Featured
+
+                            </span>
+
+                        </div>
+
+                        <div class="product-body">
+
+                            <div class="product-header">
+
+                                <h3>
+
+                                    OG Kush
+
+                                </h3>
+
+                                <span class="product-rating">
+
+                                    ★★★★★
+
+                                </span>
+
+                            </div>
+
+                            <div class="product-meta">
+
+                                <span>
+
+                                    THC 26%
+
+                                </span>
+
+                                <span>
+
+                                    CBD 0.8%
+
+                                </span>
+
+                                <span>
+
+                                    Indoor
+
+                                </span>
+
+                            </div>
+
+                            <p>
+
+                                Dense premium flower with earthy pine aromas,
+                                citrus undertones and exceptional consistency.
+
+                            </p>
+
+                            <div class="product-footer">
+
+                                <div class="product-price">
+
+                                    R850
+
+                                </div>
+
+                                <button class="add-cart">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+            <div class="catalogue-footer">
+
+                <button class="btn btn-secondary">
+
+                    Load More Strains
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         07 ABOUT
+         (Anchor placeholder — full section pending a future
+         build stage. No About section markup has been authored
+         yet in any prior version of this file.)
+    ====================================================== -->
+
+    <section class="section-placeholder" id="about">
+
+        <div class="container">
+
+            <h2>About</h2>
+
+            <p>Coming in a future build stage.</p>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         08 MEMBERS
+         (Anchor placeholder — full section pending a future
+         build stage.)
+    ====================================================== -->
+
+    <section class="section-placeholder" id="members">
+
+        <div class="container">
+
+            <h2>Members</h2>
+
+            <p>Coming in a future build stage.</p>
+
+        </div>
+
+    </section>
+
+    <!-- =====================================================
+         09 CONTACT
+         (Anchor placeholder — full section pending a future
+         build stage.)
+    ====================================================== -->
+
+    <section class="section-placeholder" id="contact">
+
+        <div class="container">
+
+            <h2>Contact</h2>
+
+            <p>Coming in a future build stage.</p>
+
+        </div>
+
+    </section>
+
+    <script>
+
+        /*
+/*======================================================
+STAGE 6A
+CANONICAL PRODUCT DATABASE
+======================================================*/
+
+const oreganoProducts = [
+
+    {
+        id: 1,
+        sku: "OG790-001",
+        name: "OG Kush",
+        price: 850,
+        thc: "26%",
+        cbd: "0.8%",
+        type: "Hybrid",
+        category: "Indoor Flower",
+        featured: true,
+        stock: 18,
+        image: "https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 2,
+        sku: "OG790-002",
+        name: "Gelato",
+        price: 820,
+        thc: "24%",
+        cbd: "0.5%",
+        type: "Hybrid",
+        category: "Indoor Flower",
+        featured: false,
+        stock: 14,
+        image: "https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 3,
+        sku: "OG790-003",
+        name: "Wedding Cake",
+        price: 880,
+        thc: "27%",
+        cbd: "0.4%",
+        type: "Indica",
+        category: "Indoor Flower",
+        featured: true,
+        stock: 9,
+        image: "https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 4,
+        sku: "OG790-004",
+        name: "Blue Dream",
+        price: 790,
+        thc: "22%",
+        cbd: "0.6%",
+        type: "Sativa",
+        category: "Indoor Flower",
+        featured: false,
+        stock: 20,
+        image: "https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 5,
+        sku: "OG790-005",
+        name: "Purple Punch",
+        price: 860,
+        thc: "25%",
+        cbd: "0.5%",
+        type: "Indica",
+        category: "Indoor Flower",
+        featured: false,
+        stock: 11,
+        image: "https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 6,
+        sku: "OG790-006",
+        name: "Sour Diesel",
+        price: 810,
+        thc: "23%",
+        cbd: "0.7%",
+        type: "Sativa",
+        category: "Indoor Flower",
+        featured: false,
+        stock: 16,
+        image: "https://images.unsplash.com/photo-1603909223429-69bb7101f420?auto=format&fit=crop&w=900&q=80"
+    }
+
+]; 
+/*======================================================
+STAGE 6A
+PRODUCT DATA HELPERS
+======================================================*/
+
+function getAllProducts() {
+    return oreganoProducts;
+}
+
+function getProductById(id) {
+    return oreganoProducts.find(product => product.id === id);
+}
+
+function getProductBySku(sku) {
+    return oreganoProducts.find(product => product.sku === sku);
+}
+
+function getFeaturedProducts() {
+    return oreganoProducts.filter(product => product.featured);
+}
+
+function getProductsByCategory(category) {
+    return oreganoProducts.filter(product =>
+        product.category === category
+    );
+}
+
+function getProductsByType(type) {
+    return oreganoProducts.filter(product =>
+        product.type === type
+    );
+}
+
+function getInStockProducts() {
+    return oreganoProducts.filter(product =>
+        product.stock > 0
+    );
+}
+
+function getOutOfStockProducts() {
+    return oreganoProducts.filter(product =>
+        product.stock <= 0
+    );
+}
+
+function getProductCount() {
+    return oreganoProducts.length;
+}       ======================================================
+        OREGANO 790
+        CANONICAL JAVASCRIPT
+
+        01 HEADER SCROLL STATE
+        02 THEME TOGGLE
+        03 MOBILE MENU
+        04 HERO PARALLAX
+        05 BUTTON RIPPLE
+        06 PAGE FADE-IN
+        07 SCROLL REVEAL — SECTIONS
+        08 SCROLL REVEAL — FEATURED COLLECTION
+        ======================================================
+        */
+
+        /*======================================================
+        01 HEADER SCROLL STATE
+        ======================================================*/
+
+        const header = document.getElementById("siteHeader");
+
+        window.addEventListener("scroll", () => {
+
+            if (window.scrollY > 40) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
+            }
+
+        });
+
+        /*======================================================
+        02 THEME TOGGLE
+        ======================================================*/
+
+        const themeToggle = document.getElementById("themeToggle");
+
+        themeToggle.addEventListener("click", () => {
+
+            document.body.classList.toggle("light");
+
+            themeToggle.textContent =
+                document.body.classList.contains("light")
+                    ? "🌙"
+                    : "☀";
+
+        });
+
+        /*======================================================
+        03 MOBILE MENU
+        ======================================================*/
+
+        const menu = document.getElementById("mobileMenu");
+        const burger = document.getElementById("hamburger");
+
+        burger.addEventListener("click", () => {
+
+            menu.classList.toggle("open");
+
+        });
+
+        /*======================================================
+        04 HERO PARALLAX
+        ======================================================*/
+
+        const heroImage = document.querySelector(".hero-image img");
+
+        window.addEventListener("scroll", () => {
+
+            const offset = window.pageYOffset;
+
+            if (heroImage) {
+
+                heroImage.style.transform =
+                    `translateY(${offset * 0.12}px) scale(1.08)`;
+
+            }
+
+        });
+
+        /*======================================================
+        05 BUTTON RIPPLE
+        ======================================================*/
+
+        document.querySelectorAll(".btn").forEach(button => {
+
+            button.addEventListener("click", function (e) {
+
+                const ripple = document.createElement("span");
+
+                ripple.className = "ripple";
+
+                const rect = this.getBoundingClientRect();
+
+                ripple.style.left = `${e.clientX - rect.left}px`;
+
+                ripple.style.top = `${e.clientY - rect.top}px`;
+
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+
+            });
+
+        });
+
+        /*======================================================
+        06 PAGE FADE-IN
+        ======================================================*/
+
+        window.addEventListener("load", () => {
+
+            document.body.classList.add("loaded");
+
+        });
+
+        /*======================================================
+        07 SCROLL REVEAL — SECTIONS
+        ======================================================*/
+
+        const observer = new IntersectionObserver((entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("visible");
+
+                }
+
+            });
+
+        }, {
+            threshold: .18
+        });
+
+        document.querySelectorAll("section").forEach(section => {
+
+            observer.observe(section);
+
+        });
+
+        /*======================================================
+        08 SCROLL REVEAL — FEATURED COLLECTION
+        ======================================================*/
+
+        const showcaseObserver = new IntersectionObserver((entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+/*======================================================
+STAGE 6A
+DATABASE INITIALIZATION
+======================================================*/
+
+console.log(
+    `OREGANO 790 — ${getProductCount()} products loaded.`
+);
+
+console.table(getAllProducts());
+                    entry.target.classList.add("visible");
+
+                }
+
+            });
+
+        }, {
+            threshold: .20
+        });
+
+        document.querySelectorAll(
+
+            ".showcase-image, .showcase-content"
+
+        ).forEach(item => {
+
+            showcaseObserver.observe(item);
+
+        });
+
+    </script>
+
+</body>
+</html>
