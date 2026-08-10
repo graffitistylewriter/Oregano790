@@ -1,27 +1,13 @@
 /*=========================================================
 OREGANO 790
 FRONTEND BOOTSTRAP
-DEV-007 PRODUCT MODAL
+DEV-001 FRONTEND FOUNDATION
 =========================================================*/
 
 (() => {
-    const loadProductModal = () => {
-        if (window.OreganoProductModal) {
-            window.OreganoProductModal.init();
-            return;
-        }
-
-        const script = document.createElement("script");
-        script.src = "assets/js/ui/product-modal.js";
-        script.onload = () => window.OreganoProductModal?.init();
-        script.onerror = () => console.error("OREGANO 790 — Product modal module failed to load.");
-        document.head.appendChild(script);
-    };
-
     const boot = () => {
         window.OreganoNavigation?.init();
         window.OreganoCatalogueUI?.init();
-        loadProductModal();
 
         const heroImage = document.querySelector(".hero-image img");
         if (heroImage) {
