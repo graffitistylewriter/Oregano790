@@ -1,0 +1,26 @@
+[
+  {
+    "id": "dev-001",
+    "name": "Oregano790 Sample Strain",
+    "sku": "ORG-001",
+    "type": "Hybrid",
+    "category": "Indoor Flower",
+    "description": "Development catalogue product.",
+    "image": "assets/images/product-placeholder.svg",
+    "price": 0,
+    "stock": 10,
+    "featured": true
+  },
+  {
+    "id": "dev-002",
+    "name": "Oregano790 Reserve Sample",
+    "sku": "ORG-002",
+    "type": "Indica",
+    "category": "Indoor Flower",
+    "description": "Second development catalogue product.",
+    "image": "assets/images/product-placeholder.svg",
+    "price": 0,
+    "stock": 5,
+    "featured": false
+  }
+]
