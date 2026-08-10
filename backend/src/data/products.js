@@ -39,6 +39,13 @@ export const products = [
         metadata: {
             createdAt: "",
             updatedAt: ""
-        }
+        },
+
+        // Temporary compatibility fields for existing frontend boundaries.
+        price: 0,
+        stock: 10,
+        thc: "—",
+        cbd: "—",
+        image: "assets/images/product-placeholder.svg"
     }
 ];
