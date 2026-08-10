@@ -172,3 +172,53 @@ const OreganoProductModal = (() => {
             <div class="oregano-product-modal__price">${escapeHtml(formatPrice(product.price))}</div>
         `;
     };
+
+    const open = async (card) => {
+        previousFocus = document.activeElement;
+        const product = await findProduct(card);
+        if (!product) {
+            console.warn("OREGANO 790 — Product detail could not be resolved.");
+            return;
+        }
+
+        renderProduct(product);
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("oregano-modal-open");
+        modal.querySelector(".oregano-product-modal__close")?.focus();
+    };
+
+    const close = () => {
+        if (!modal || modal.hidden) return;
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("oregano-modal-open");
+        previousFocus?.focus?.();
+        previousFocus = null;
+    };
+
+    const bind = () => {
+        const grid = document.getElementById("catalogueGrid");
+        if (!grid || grid.dataset.oreganoModalBound === "true") return;
+
+        grid.dataset.oreganoModalBound = "true";
+        grid.addEventListener("click", event => {
+            const trigger = event.target.closest(".quick-view");
+            if (!trigger) return;
+
+            const card = trigger.closest(".product-card");
+            if (!card) return;
+            event.preventDefault();
+            open(card).catch(error => console.error("OREGANO 790 — Product modal failed:", error));
+        });
+    };
+
+    const init = () => {
+        ensureModal();
+        bind();
+    };
+
+    return Object.freeze({ init, open, close });
+})();
+
+if (typeof window !== "undefined") window.OreganoProductModal = OreganoProductModal;
