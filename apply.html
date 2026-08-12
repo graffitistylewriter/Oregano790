@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OREGANO 790 | Membership Application</title>
+  <meta name="description" content="Apply for Oregano790 membership.">
+  <style>
+    :root{--black:#0e0e0e;--charcoal:#222;--white:#fff;--olive:#59624c;--sand:#d8d3c8;--muted:#aaa}
+    *{box-sizing:border-box} body{margin:0;background:var(--black);color:var(--white);font-family:Inter,Arial,sans-serif;min-height:100vh}
+    main{width:min(760px,92%);margin:0 auto;padding:90px 0}
+    .eyebrow{color:var(--sand);letter-spacing:.25em;text-transform:uppercase;font-size:.72rem;margin-bottom:20px}
+    h1{font-family:Georgia,serif;font-size:clamp(3rem,8vw,5.5rem);line-height:.95;margin:0 0 24px}
+    .intro{color:#ccc;line-height:1.8;margin-bottom:42px}
+    form{display:grid;gap:22px;padding:32px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(255,255,255,.025)}
+    label{display:grid;gap:8px;font-size:.86rem;letter-spacing:.06em}
+    input,textarea,select{width:100%;padding:15px 16px;border:1px solid rgba(255,255,255,.14);border-radius:10px;background:#151515;color:#fff;font:inherit}
+    textarea{min-height:130px;resize:vertical} input:focus,textarea:focus,select:focus{outline:2px solid rgba(89,98,76,.7);outline-offset:2px}
+    button{border:0;border-radius:999px;padding:17px 28px;background:var(--olive);color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
+    button:disabled{opacity:.55;cursor:not-allowed}.status{min-height:24px;line-height:1.6}.success{color:#b9c7a7}.error{color:#e6a7a7}.reference{margin-top:18px;color:var(--sand);font-weight:600}
+    .back{display:inline-block;margin-bottom:50px;color:#ccc;text-decoration:none}.back:hover{color:#fff}
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="index.html">← Back to Oregano790</a>
+    <div class="eyebrow">Private Membership</div>
+    <h1>Apply to join.</h1>
+    <p class="intro">Tell us a little about yourself and why you would like to become an Oregano790 member. Your application will be reviewed before membership is activated.</p>
+
+    <form id="application-form" novalidate>
+      <label>Full name
+        <input name="name" autocomplete="name" required>
+      </label>
+      <label>Email address
+        <input name="email" type="email" autocomplete="email" required>
+      </label>
+      <label>Phone number
+        <input name="phone" type="tel" autocomplete="tel">
+      </label>
+      <label>City / area
+        <input name="location" autocomplete="address-level2">
+      </label>
+      <label>Why would you like to join?
+        <textarea name="reason" required></textarea>
+      </label>
+      <button id="submit-button" type="submit">Submit application</button>
+      <div id="application-status" class="status" role="status" aria-live="polite"></div>
+      <div id="application-reference" class="reference"></div>
+    </form>
+  </main>
+
+  <script src="./assets/js/services/application-service.js"></script>
+  <script>
+    const form = document.getElementById("application-form");
+    const button = document.getElementById("submit-button");
+    const status = document.getElementById("application-status");
+    const reference = document.getElementById("application-reference");
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      status.className = "status";
+      status.textContent = "";
+      reference.textContent = "";
+
+      if (!form.reportValidity()) return;
+
+      const values = Object.fromEntries(new FormData(form).entries());
+      button.disabled = true;
+      button.textContent = "Submitting…";
+      status.textContent = "Sending your application securely…";
+
+      try {
+        const result = await window.OreganoApplicationService.submitApplication(values);
+        status.className = "status success";
+        status.textContent = "Application submitted successfully. We’ll review it before membership activation.";
+        reference.textContent = result.application?.id ? `Application reference: ${result.application.id}` : "";
+        form.reset();
+      } catch (error) {
+        status.className = "status error";
+        status.textContent = error.message || "We could not submit your application. Please try again.";
+      } finally {
+        button.disabled = false;
+        button.textContent = "Submit application";
+      }
+    });
+  </script>
+</body>
+</html>
