@@ -1,8 +1,13 @@
 import { healthRoute } from "./routes/health.js";
 import { catalogueRoute } from "./routes/catalogue.js";
+import { applicationsRoute } from "./routes/applications.js";
 import { catalogueRepository as defaultCatalogueRepository } from "./catalogue.js";
+import { applicationRepository as defaultApplicationRepository } from "./applications-repository.js";
 
-export const createApp = ({ catalogueRepository = defaultCatalogueRepository } = {}) => (req, res) => {
+export const createApp = ({
+    catalogueRepository = defaultCatalogueRepository,
+    applicationRepository = defaultApplicationRepository
+} = {}) => (req, res) => {
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
@@ -19,6 +24,10 @@ export const createApp = ({ catalogueRepository = defaultCatalogueRepository } =
 
     if (req.url.startsWith("/api/v1/catalogue")) {
         return catalogueRoute(req, res, { catalogueRepository });
+    }
+
+    if (req.url.startsWith("/api/v1/applications")) {
+        return applicationsRoute(req, res, { applicationRepository });
     }
 
     res.writeHead(404);
