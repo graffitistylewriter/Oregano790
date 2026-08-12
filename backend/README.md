@@ -2,13 +2,9 @@
 
 ## Current status
 
-The backend foundation is now a working Node.js HTTP API for local development. It has an established runtime and package manifest, environment configuration, a health endpoint, structured JSON error responses, API versioning, catalogue request handling, and an automated Node test suite.
+The backend is a dependency-light Node.js HTTP API for the Oregano790 catalogue application. It provides health checks, persistent catalogue storage, catalogue reads, and catalogue management operations.
 
-The current runtime intentionally remains dependency-light and uses Node's built-in HTTP server. It does **not** yet include a database adapter, authentication provider, permissions layer, deployment configuration, or external persistence.
-
-## Development rule
-
-Do not add a backend framework, database driver, authentication provider, or deployment configuration until the runtime requirements are explicitly established and tested in the repository.
+The current catalogue management endpoints are intentionally a development/admin foundation. **They are not authenticated yet and must not be exposed to a public production deployment until the admin authentication and authorization layer is implemented.**
 
 ## Current boundary
 
@@ -21,7 +17,9 @@ Backend HTTP API
    ↓
 Application catalogue service
    ↓
-Development product data
+Catalogue repository
+   ↓
+Persistent catalogue storage
 ```
 
 ## Runtime endpoints
@@ -32,44 +30,35 @@ Development product data
 GET /api/v1/health
 ```
 
-Returns a structured health response containing the backend service name, version, and environment.
-
-### Catalogue
+### Catalogue read
 
 ```text
 GET /api/v1/catalogue
+GET /api/v1/catalogue?id=<product-id>
 ```
 
-Supports the current catalogue query boundary and returns normalized development product data.
+### Catalogue management foundation
+
+```text
+POST   /api/v1/catalogue
+PUT    /api/v1/catalogue/:id
+DELETE /api/v1/catalogue/:id
+```
+
+`POST` requires at least `name` and `sku`. `PUT` preserves the existing product id. `DELETE` removes the product from persistent catalogue storage.
 
 ## Local development
 
-From this directory:
+From the repository root:
 
 ```powershell
+Set-Location ".\backend"
 npm test
 npm start
 ```
 
-The default development port is `3000`. The frontend may be served separately from the repository root, for example:
+The default development port is `3000`.
 
-```powershell
-python -m http.server 8080
-```
+## Development sequence
 
-The backend allows the local frontend origins `http://localhost:8080` and `http://127.0.0.1:8080` through its development CORS boundary.
-
-## Verification status
-
-The current DEV-005 runtime verification has established:
-
-- Backend test suite: **9/9 passing**.
-- Health endpoint: **working**.
-- Catalogue endpoint: **working**.
-- Catalogue response: **2 development products returned**.
-- Frontend: **serving successfully on port 8080**.
-- Browser catalogue request: **observed from the live frontend**.
-
-## Next backend work
-
-The backend foundation is sufficient for the next application milestone. Future work should be driven by explicit requirements and tested incrementally. Persistence, authentication, permissions, deployment, and additional business endpoints should be introduced only when their requirements are established.
+The next major backend requirement is the protected Oregano owner workspace. Authentication and authorization must be implemented before catalogue write endpoints are considered production-safe.
