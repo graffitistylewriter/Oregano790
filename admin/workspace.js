@@ -5,7 +5,7 @@ import {
   deleteProduct
 } from "../assets/js/services/product-service.js";
 
-const state = { token: sessionStorage.getItem("oregano.admin.token") || "", editingId: null };
+const state = { token: sessionStorage.getItem("oregano.admin.token") || "", editingId: null, deletingId: null };
 const $ = id => document.getElementById(id);
 
 const showWorkspace = () => { $("login").classList.add("hidden"); $("workspace").classList.remove("hidden"); };
@@ -16,14 +16,21 @@ const setStatus = (message, isError = false) => {
 };
 const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[char]));
 
+const closeDeleteConfirmation = () => {
+  state.deletingId = null;
+  $("delete-confirm").classList.add("hidden");
+  $("delete-status").textContent = "";
+};
+
 const renderProducts = products => {
   $("product-count").textContent = products.length;
   $("products").innerHTML = products.map(product => `
     <div class="row">
       <div class="row-main"><strong>${escapeHtml(product.name)}</strong><span class="muted">${escapeHtml(product.sku || "No SKU")} · ${escapeHtml(product.category || "Uncategorised")}</span></div>
-      <div class="row-actions"><span class="badge">${escapeHtml(product.type || "Product")}</span><button class="btn secondary edit-product" data-id="${escapeHtml(product.id)}" type="button">Edit</button></div>
+      <div class="row-actions"><span class="badge">${escapeHtml(product.type || "Product")}</span><button class="btn secondary edit-product" data-id="${escapeHtml(product.id)}" type="button">Edit</button><button class="btn danger delete-product" data-id="${escapeHtml(product.id)}" type="button">Delete</button></div>
     </div>`).join("");
   document.querySelectorAll(".edit-product").forEach(button => button.addEventListener("click", () => beginEdit(products.find(product => String(product.id) === String(button.dataset.id)))));
+  document.querySelectorAll(".delete-product").forEach(button => button.addEventListener("click", () => beginDelete(products.find(product => String(product.id) === String(button.dataset.id)))));
 };
 
 const loadCatalogue = async () => {
@@ -44,6 +51,7 @@ const resetProductForm = () => {
 
 const beginEdit = product => {
   if (!product) return;
+  closeDeleteConfirmation();
   state.editingId = product.id;
   const form = $("product-form");
   form.classList.remove("hidden");
@@ -58,6 +66,16 @@ const beginEdit = product => {
   form.elements.description.value = product.description || "";
   form.elements.featured.checked = Boolean(product.featured);
   $("product-name").focus();
+};
+
+const beginDelete = product => {
+  if (!product) return;
+  resetProductForm();
+  state.deletingId = product.id;
+  $("delete-confirm").classList.remove("hidden");
+  $("delete-confirm-text").textContent = `You are about to permanently remove “${product.name || product.id}” from the persistent catalogue. This cannot be undone.`;
+  $("delete-status").textContent = "";
+  $("confirm-delete").focus();
 };
 
 $("login-form").addEventListener("submit", async event => {
@@ -78,8 +96,23 @@ $("login-form").addEventListener("submit", async event => {
 });
 
 $("refresh").addEventListener("click", () => loadCatalogue().catch(error => setStatus(error.message, true)));
-$("add-product").addEventListener("click", () => { resetProductForm(); $("product-form").classList.remove("hidden"); $("product-name").focus(); });
+$("add-product").addEventListener("click", () => { closeDeleteConfirmation(); resetProductForm(); $("product-form").classList.remove("hidden"); $("product-name").focus(); });
 $("cancel-product").addEventListener("click", resetProductForm);
+$("cancel-delete").addEventListener("click", closeDeleteConfirmation);
+
+$("confirm-delete").addEventListener("click", async () => {
+  const deletingId = state.deletingId;
+  if (!deletingId) return;
+  $("delete-status").textContent = "Deleting product…";
+  try {
+    await deleteProduct(state.token, deletingId);
+    closeDeleteConfirmation();
+    await loadCatalogue();
+    setStatus("Product deleted from the persistent catalogue.");
+  } catch (error) {
+    $("delete-status").textContent = error.message;
+  }
+});
 
 $("product-form").addEventListener("submit", async event => {
   event.preventDefault();
@@ -104,7 +137,7 @@ $("product-form").addEventListener("submit", async event => {
 });
 
 $("logout").addEventListener("click", () => {
-  state.token = ""; sessionStorage.removeItem("oregano.admin.token"); $("products").innerHTML = ""; resetProductForm(); showLogin();
+  state.token = ""; sessionStorage.removeItem("oregano.admin.token"); $("products").innerHTML = ""; resetProductForm(); closeDeleteConfirmation(); showLogin();
 });
 
 if (state.token) {
