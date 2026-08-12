@@ -1,8 +1,9 @@
 import { createServer } from "node:http";
 import { app } from "./src/app.js";
+import { config, assertProductionConfiguration } from "./src/config.js";
 
-const PORT = Number(process.env.PORT || 3000);
+assertProductionConfiguration();
 
-createServer(app).listen(PORT, () => {
-    console.log(`Oregano790 backend running on port ${PORT}`);
+createServer(app).listen(config.port, () => {
+    console.log(`Oregano790 backend running on port ${config.port}`);
 });
