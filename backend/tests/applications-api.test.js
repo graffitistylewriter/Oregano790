@@ -17,7 +17,6 @@ const adminHeaders = {
 };
 
 before(async () => {
-    await applicationRepository.replaceAll?.([]);
     await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
     baseUrl = `http://127.0.0.1:${server.address().port}`;
 });
