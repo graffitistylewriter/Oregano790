@@ -1,11 +1,35 @@
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import test, { after, before } from "node:test";
-import { app } from "../src/app.js";
-import { catalogueRepository } from "../src/catalogue.js";
+import { createApp } from "../src/app.js";
+import { createCatalogueRepository } from "../src/repositories/catalogue-repository.js";
 
-const server = createServer(app);
+const ADMIN_TOKEN = "test-admin-token";
+process.env.OREGANO_ADMIN_TOKEN = ADMIN_TOKEN;
+
+const catalogueRepository = createCatalogueRepository({
+    seedProducts: [
+        {
+            id: "test-001",
+            name: "Test Strain",
+            sku: "TEST-001",
+            type: "Hybrid",
+            category: "Indoor Flower",
+            description: "Test product",
+            price: 100,
+            stock: 5,
+            featured: false
+        }
+    ]
+});
+
+const server = createServer(createApp({ catalogueRepository }));
 let baseUrl;
+
+const adminHeaders = {
+    Authorization: `Bearer ${ADMIN_TOKEN}`,
+    "Content-Type": "application/json"
+};
 
 before(async () => {
     await catalogueRepository.replaceAll([
@@ -47,7 +71,7 @@ test("GET catalogue by id returns one product", async () => {
 test("POST catalogue creates a product", async () => {
     const response = await fetch(`${baseUrl}/api/v1/catalogue`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: adminHeaders,
         body: JSON.stringify({ id: "test-002", name: "New Strain", sku: "TEST-002", price: 200, stock: 3 })
     });
     assert.equal(response.status, 201);
@@ -58,7 +82,7 @@ test("POST catalogue creates a product", async () => {
 test("PUT catalogue updates a product", async () => {
     const response = await fetch(`${baseUrl}/api/v1/catalogue/test-002`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: adminHeaders,
         body: JSON.stringify({ price: 250, stock: 7 })
     });
     assert.equal(response.status, 200);
@@ -68,7 +92,10 @@ test("PUT catalogue updates a product", async () => {
 });
 
 test("DELETE catalogue removes a product", async () => {
-    const response = await fetch(`${baseUrl}/api/v1/catalogue/test-002`, { method: "DELETE" });
+    const response = await fetch(`${baseUrl}/api/v1/catalogue/test-002`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${ADMIN_TOKEN}` }
+    });
     assert.equal(response.status, 200);
     const body = await response.json();
     assert.equal(body.product.id, "test-002");
