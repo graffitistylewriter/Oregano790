@@ -1,4 +1,4 @@
-import { catalogueRepository } from "../catalogue.js";
+import { catalogueRepository as defaultCatalogueRepository } from "../catalogue.js";
 import { requireAdmin } from "../auth/admin-auth.js";
 
 const send = (res, status, body) => {
@@ -22,7 +22,7 @@ const readJsonBody = req => new Promise((resolve, reject) => {
 
 const getId = req => new URL(req.url, "http://localhost").searchParams.get("id");
 
-export const catalogueRoute = async (req, res) => {
+export const catalogueRoute = async (req, res, { catalogueRepository = defaultCatalogueRepository } = {}) => {
     try {
         if (req.method === "GET") {
             const id = getId(req);
