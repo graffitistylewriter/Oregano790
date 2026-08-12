@@ -1,4 +1,5 @@
 import { catalogueRepository } from "../catalogue.js";
+import { requireAdmin } from "../auth/admin-auth.js";
 
 const send = (res, status, body) => {
     res.writeHead(status);
@@ -13,11 +14,8 @@ const readJsonBody = req => new Promise((resolve, reject) => {
     });
     req.on("end", () => {
         if (!raw.trim()) return resolve({});
-        try {
-            resolve(JSON.parse(raw));
-        } catch {
-            reject(new Error("Request body must contain valid JSON."));
-        }
+        try { resolve(JSON.parse(raw)); }
+        catch { reject(new Error("Request body must contain valid JSON.")); }
     });
     req.on("error", reject);
 });
@@ -36,6 +34,8 @@ export const catalogueRoute = async (req, res) => {
             }
             return send(res, 200, { products: await catalogueRepository.list() });
         }
+
+        if (!requireAdmin(req, res)) return;
 
         const match = req.url.match(/^\/api\/v1\/catalogue\/([^/?]+)/);
         const id = match ? decodeURIComponent(match[1]) : null;
@@ -56,16 +56,12 @@ export const catalogueRoute = async (req, res) => {
         if (req.method === "PUT" && id) {
             const changes = await readJsonBody(req);
             const product = await catalogueRepository.update(id, changes);
-            return product
-                ? send(res, 200, { product })
-                : send(res, 404, { error: "Product not found" });
+            return product ? send(res, 200, { product }) : send(res, 404, { error: "Product not found" });
         }
 
         if (req.method === "DELETE" && id) {
             const product = await catalogueRepository.remove(id);
-            return product
-                ? send(res, 200, { product })
-                : send(res, 404, { error: "Product not found" });
+            return product ? send(res, 200, { product }) : send(res, 404, { error: "Product not found" });
         }
 
         return send(res, 405, { error: "Method not allowed" });
