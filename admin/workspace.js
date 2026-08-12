@@ -90,13 +90,14 @@ $("product-form").addEventListener("submit", async event => {
     description: String(form.get("description") || "").trim(), price: Number(form.get("price") || 0),
     stock: Number(form.get("stock") || 0), featured: form.get("featured") === "on"
   };
-  $("product-form-status").textContent = state.editingId ? "Saving changes…" : "Saving product…";
+  const editingId = state.editingId;
+  $("product-form-status").textContent = editingId ? "Saving changes…" : "Saving product…";
   try {
-    if (state.editingId) await updateProduct(state.token, state.editingId, product);
+    if (editingId) await updateProduct(state.token, editingId, product);
     else await createProduct(state.token, product);
     resetProductForm();
     await loadCatalogue();
-    setStatus(state.editingId ? "Product updated and saved to the persistent catalogue." : "Product created and saved to the persistent catalogue.");
+    setStatus(editingId ? "Product updated and saved to the persistent catalogue." : "Product created and saved to the persistent catalogue.");
   } catch (error) {
     $("product-form-status").textContent = error.message;
   }
