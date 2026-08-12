@@ -1,18 +1,18 @@
 /*=========================================================
 OREGANO 790
 CATALOGUE SERVICE
-DEV-005 FILTER BOUNDARY
+DEV-022C FRONTEND SERVICE BOUNDARY
 =========================================================*/
 
 const OreganoCatalogueService = (() => {
     const productService = () => window.OreganoProductService;
 
-    const list = async ({ filter = "all", search = "" } = {}) => {
+    const list = async ({ token = "", filter = "all", search = "" } = {}) => {
         const service = productService();
         if (!service) return [];
 
         const normalizedFilter = String(filter || "all").trim();
-        const params = { search };
+        const params = { token, search };
 
         if (normalizedFilter !== "all") {
             if (normalizedFilter === "Indoor Flower") {
@@ -25,11 +25,11 @@ const OreganoCatalogueService = (() => {
         return service.fetchCatalogue(params);
     };
 
-    const getById = async (id) => {
+    const getById = async (id, token = "") => {
         const service = productService();
         if (!service) return null;
 
-        const products = await service.fetchCatalogue({ id });
+        const products = await service.fetchCatalogue({ token, id });
         return products[0] || null;
     };
 
