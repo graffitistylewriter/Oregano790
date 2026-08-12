@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createServer } from "node:http";
+import { createServer, request as httpRequest } from "node:http";
 import { app } from "../src/app.js";
 
 const request = (server, options = {}, body = null) => new Promise((resolve, reject) => {
-    const req = require("node:http").request({ ...options, port: server.address().port }, res => {
+    const req = httpRequest({ ...options, port: server.address().port }, res => {
         let raw = "";
         res.on("data", chunk => { raw += chunk; });
         res.on("end", () => resolve({ status: res.statusCode, body: raw ? JSON.parse(raw) : null }));
