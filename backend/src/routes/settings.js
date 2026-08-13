@@ -1,5 +1,8 @@
 ﻿import { siteSettingsRepository as defaultSiteSettingsRepository } from "../site-settings-repository.js";
-import { toPublicSiteSettings } from "../models/site-settings.js";
+import {
+    toPublicSiteSettings,
+    createSiteSettings
+} from "../models/site-settings.js";
 import { requireAdmin } from "../auth/admin-auth.js";
 
 const send = (res, status, body) => {
@@ -15,6 +18,7 @@ const readJsonBody = req => new Promise((resolve, reject) => {
 
         if (raw.length > 1_000_000) {
             reject(new Error("Request body is too large."));
+            req.destroy();
         }
     });
 
@@ -33,45 +37,98 @@ const readJsonBody = req => new Promise((resolve, reject) => {
     req.on("error", reject);
 });
 
+const sendPublicSettings = async (
+    res,
+    siteSettingsRepository
+) => {
+    const settings = await siteSettingsRepository.get();
+
+    return send(res, 200, {
+        settings: toPublicSiteSettings(settings)
+    });
+};
+
 export const settingsRoute = async (
     req,
     res,
     { siteSettingsRepository = defaultSiteSettingsRepository } = {}
 ) => {
     try {
-        if (req.url !== "/api/v1/settings") {
-            return send(res, 404, { error: "Settings route not found" });
-        }
-
-        if (req.method === "GET") {
-            const settings = await siteSettingsRepository.get();
-
-            return send(res, 200, {
-                settings: toPublicSiteSettings(settings)
+        if (
+            req.url !== "/api/v1/settings" &&
+            req.url !== "/api/v1/settings/public"
+        ) {
+            return send(res, 404, {
+                error: "Settings route not found"
             });
         }
 
+        /*
+         * Public settings endpoint.
+         *
+         * This is the only unauthenticated settings endpoint.
+         * The response always passes through the explicit public
+         * projection rather than exposing the repository object.
+         */
+        if (
+            req.url === "/api/v1/settings/public" &&
+            req.method === "GET"
+        ) {
+            return sendPublicSettings(
+                res,
+                siteSettingsRepository
+            );
+        }
+
+        /*
+         * Everything under the administrative settings endpoint
+         * requires the existing Bearer authentication boundary.
+         */
         if (!requireAdmin(req, res)) return;
 
-        if (req.method === "PUT") {
+        if (
+            req.url === "/api/v1/settings" &&
+            req.method === "GET"
+        ) {
+            return sendPublicSettings(
+                res,
+                siteSettingsRepository
+            );
+        }
+
+        if (
+            req.url === "/api/v1/settings" &&
+            req.method === "PUT"
+        ) {
             const settings = await readJsonBody(req);
-            const replaced = await siteSettingsRepository.replace(settings);
+
+            const normalized = createSiteSettings(settings);
+
+            const replaced =
+                await siteSettingsRepository.replace(normalized);
 
             return send(res, 200, {
                 settings: toPublicSiteSettings(replaced)
             });
         }
 
-        if (req.method === "PATCH") {
+        if (
+            req.url === "/api/v1/settings" &&
+            req.method === "PATCH"
+        ) {
             const changes = await readJsonBody(req);
-            const updated = await siteSettingsRepository.update(changes);
+
+            const updated =
+                await siteSettingsRepository.update(changes);
 
             return send(res, 200, {
                 settings: toPublicSiteSettings(updated)
             });
         }
 
-        return send(res, 405, { error: "Method not allowed" });
+        return send(res, 405, {
+            error: "Method not allowed"
+        });
     } catch (error) {
         return send(res, 400, {
             error: error.message || "Settings request failed."
