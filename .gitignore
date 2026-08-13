@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Runtime application storage
+backend/storage/applications.json
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
