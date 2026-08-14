@@ -1,7 +1,7 @@
 /*=========================================================
 OREGANO 790
 CATALOGUE UI
-DEV-037 CATALOGUE UI REQUEST STATE
+DEV-040 PRESENTATION-SAFE CATALOGUE FALLBACK
 =========================================================*/
 
 const escapeHtml = value => String(value ?? "")
@@ -26,6 +26,9 @@ export const getCatalogueQuery = (filter = "All", search = "") => ({
 
 export const shouldApplyCatalogueResponse = (requestId, latestRequestId) =>
     requestId === latestRequestId;
+
+export const shouldLoadCatalogue = features =>
+    features?.apiBackedCatalogue === true || features?.catalogueApiFallback === true;
 
 export const createProductCardMarkup = (product, index = 0) => {
     const imageSource = typeof product?.image === "string"
@@ -170,7 +173,7 @@ const init = () => {
         });
     }
 
-    if (getConfig().apiBackedCatalogue === true) load();
+    if (shouldLoadCatalogue(getConfig())) load();
 };
 
 const OreganoCatalogueUI = Object.freeze({ init });
