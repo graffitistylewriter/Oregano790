@@ -1,7 +1,7 @@
 /*=========================================================
 OREGANO 790
 FRONTEND BOOTSTRAP
-DEV-032 SERVICE MODULE LOADER
+DEV-034 CATALOGUE UI BOOTSTRAP
 =========================================================*/
 
 (() => {
@@ -45,7 +45,10 @@ DEV-032 SERVICE MODULE LOADER
             await loadScript("assets/js/config/app-config.js");
             await import("./services/product-service.js");
             await loadScript("assets/js/services/catalogue-service.js");
+            await import("./ui/catalogue-ui.js");
             await loadScript("assets/js/ui/product-modal.js");
+
+            window.OreganoCatalogueUI?.init();
             window.OreganoProductModal?.init();
         } catch (error) {
             console.error("OREGANO 790 — Service module bootstrap failed:", error);
