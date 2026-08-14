@@ -1,54 +1,73 @@
 /*=========================================================
 OREGANO 790
 FRONTEND BOOTSTRAP
-DEV-001 FRONTEND FOUNDATION
+DEV-032 FRONTEND RUNTIME LOADER
 =========================================================*/
 
 (() => {
-    const boot = () => {
-        window.OreganoNavigation?.init();
-        window.OreganoCatalogueUI?.init();
+    if (typeof window === "undefined" || typeof document === "undefined") return;
 
-        const heroImage = document.querySelector(".hero-image img");
-        if (heroImage) {
-            window.addEventListener("scroll", () => {
-                heroImage.style.transform = `translateY(${window.pageYOffset * 0.12}px) scale(1.08)`;
-            }, { passive: true });
-        }
+    const loadedScripts = new Map();
 
-        document.querySelectorAll(".btn").forEach(button => {
-            button.addEventListener("click", function (event) {
-                const ripple = document.createElement("span");
-                ripple.className = "ripple";
-                const rect = this.getBoundingClientRect();
-                ripple.style.left = `${event.clientX - rect.left}px`;
-                ripple.style.top = `${event.clientY - rect.top}px`;
-                this.appendChild(ripple);
-                window.setTimeout(() => ripple.remove(), 600);
-            });
+    const loadScript = (src, { module = false } = {}) => {
+        if (loadedScripts.has(src)) return loadedScripts.get(src);
+
+        const promise = new Promise((resolve, reject) => {
+            const existing = document.querySelector(`script[data-oregano-src="${src}"]`);
+            if (existing) {
+                if (existing.dataset.oreganoLoaded === "true") {
+                    resolve();
+                    return;
+                }
+                existing.addEventListener("load", () => resolve(), { once: true });
+                existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}.`)), { once: true });
+                return;
+            }
+
+            const script = document.createElement("script");
+            script.src = src;
+            script.dataset.oreganoSrc = src;
+            script.async = false;
+            if (module) script.type = "module";
+            script.addEventListener("load", () => {
+                script.dataset.oreganoLoaded = "true";
+                resolve();
+            }, { once: true });
+            script.addEventListener("error", () => reject(new Error(`Failed to load ${src}.`)), { once: true });
+            document.head.appendChild(script);
         });
 
-        document.body.classList.add("loaded");
+        loadedScripts.set(src, promise);
+        return promise;
+    };
 
-        if (window.OreganoApp) {
-            window.OreganoApp.state.set({ ready: true });
-            window.OreganoApp.ready();
+    const boot = async () => {
+        try {
+            /* Config is intentionally loaded first so every service shares one API boundary. */
+            await loadScript("assets/js/config/app-config.js");
+
+            /* Product service is ESM and publishes its compatibility global on window. */
+            await import("./services/product-service.js");
+
+            /* Legacy-compatible modules consume the service global. */
+            await loadScript("assets/js/app.js");
+            await loadScript("assets/js/services/catalogue-service.js");
+            await loadScript("assets/js/ui/product-modal.js");
+            await loadScript("assets/js/ui/catalogue-ui.js");
+
+            window.OreganoProductModal?.init();
+            window.OreganoCatalogueUI?.init();
+
+            document.body.classList.add("loaded");
+
+            if (window.OreganoApp) {
+                window.OreganoApp.state.set({ ready: true });
+                window.OreganoApp.ready();
+            }
+        } catch (error) {
+            console.error("OREGANO 790 — Frontend bootstrap failed:", error);
+            document.body.classList.add("loaded");
         }
-
-        if (typeof IntersectionObserver === "undefined") {
-            document.querySelectorAll("section, .showcase-image, .showcase-content").forEach(element => {
-                element.classList.add("visible");
-            });
-            return;
-        }
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add("visible");
-            });
-        }, { threshold: 0.18 });
-
-        document.querySelectorAll("section, .showcase-image, .showcase-content").forEach(element => observer.observe(element));
     };
 
     if (document.readyState === "loading") {
