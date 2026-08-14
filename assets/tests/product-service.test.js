@@ -3,7 +3,18 @@ import test, { afterEach, beforeEach } from "node:test";
 
 const originalFetch = globalThis.fetch;
 
-globalThis.window = {};
+globalThis.window = {
+    OreganoConfig: {
+        api: {
+            baseUrl: "http://localhost:3000",
+            cataloguePath: "/api/v1/catalogue"
+        },
+        features: {
+            apiBackedCatalogue: true,
+            catalogueApiFallback: true
+        }
+    }
+};
 
 const products = [
     {
@@ -38,6 +49,10 @@ let requests;
 
 beforeEach(() => {
     requests = [];
+    globalThis.window.OreganoConfig.features.apiBackedCatalogue = true;
+    globalThis.window.OreganoConfig.features.catalogueApiFallback = true;
+    delete globalThis.window.oreganoProducts;
+
     globalThis.fetch = async (url, options = {}) => {
         const requestUrl = new URL(String(url));
         requests.push({ url: requestUrl.toString(), options });
@@ -68,6 +83,7 @@ beforeEach(() => {
 
 afterEach(() => {
     globalThis.fetch = originalFetch;
+    delete globalThis.window.oreganoProducts;
 });
 
 const service = await import("../../assets/js/services/product-service.js");
@@ -118,6 +134,31 @@ test("fetchCatalogue resolves a single product by id", async () => {
     );
 });
 
+test("catalogue reads fall back to the legacy product collection when API mode is disabled", async () => {
+    globalThis.window.OreganoConfig.features.apiBackedCatalogue = false;
+    globalThis.window.oreganoProducts = products;
+    globalThis.fetch = async () => {
+        throw new Error("Backend unavailable");
+    };
+
+    assert.deepEqual(await service.listProducts(), { products });
+    assert.deepEqual(
+        await service.fetchCatalogue({ id: "oil-001" }),
+        [products[1]]
+    );
+    assert.equal(requests.length, 0);
+});
+
+test("catalogue reads can fall back after an API failure", async () => {
+    globalThis.window.oreganoProducts = products;
+    globalThis.fetch = async () => {
+        throw new Error("Backend unavailable");
+    };
+
+    assert.deepEqual(await service.listProducts(), { products });
+    assert.equal(requests.length, 0);
+});
+
 test("createProduct sends a JSON POST with authentication", async () => {
     const product = { name: "New Product", price: 990 };
 
@@ -156,6 +197,7 @@ test("updateProduct and deleteProduct use the catalogue resource boundary", asyn
 });
 
 test("service errors preserve the backend error message", async () => {
+    globalThis.window.OreganoConfig.features.catalogueApiFallback = false;
     globalThis.fetch = async () => jsonResponse({ error: "Catalogue unavailable" }, 503);
 
     await assert.rejects(
