@@ -1,11 +1,21 @@
-const API_BASE = "http://localhost:3000/api/v1";
+const getApiBase = () => {
+  const configuredBase = window?.OreganoConfig?.api?.baseUrl;
+  return String(configuredBase || "http://localhost:3000").replace(/\/$/, "");
+};
+
+const getCataloguePath = () => {
+  const configuredPath = window?.OreganoConfig?.api?.cataloguePath;
+  return String(configuredPath || "/api/v1/catalogue").startsWith("/")
+    ? String(configuredPath || "/api/v1/catalogue")
+    : `/${configuredPath}`;
+};
 
 const request = async (path, { token, method = "GET", body } = {}) => {
   const headers = {};
   if (token) headers.Authorization = `Bearer ${token}`;
   if (body !== undefined) headers["Content-Type"] = "application/json";
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${getApiBase()}${path}`, {
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body)
@@ -25,13 +35,13 @@ const request = async (path, { token, method = "GET", body } = {}) => {
   return data;
 };
 
-export const listProducts = token => request("/catalogue", { token });
+export const listProducts = token => request(getCataloguePath(), { token });
 
 export const fetchCatalogue = async ({ token = "", id = "", search = "", category = "", type = "" } = {}) => {
   let products;
 
   if (id) {
-    const data = await request(`/catalogue?id=${encodeURIComponent(id)}`, { token });
+    const data = await request(`${getCataloguePath()}?id=${encodeURIComponent(id)}`, { token });
     products = data.product ? [data.product] : [];
   } else {
     const data = await listProducts(token);
@@ -59,17 +69,17 @@ export const fetchCatalogue = async ({ token = "", id = "", search = "", categor
 };
 
 export const createProduct = (token, product) =>
-  request("/catalogue", { token, method: "POST", body: product });
+  request(getCataloguePath(), { token, method: "POST", body: product });
 
 export const updateProduct = (token, id, changes) =>
-  request(`/catalogue/${encodeURIComponent(id)}`, {
+  request(`${getCataloguePath()}/${encodeURIComponent(id)}`, {
     token,
     method: "PUT",
     body: changes
   });
 
 export const deleteProduct = (token, id) =>
-  request(`/catalogue/${encodeURIComponent(id)}`, {
+  request(`${getCataloguePath()}/${encodeURIComponent(id)}`, {
     token,
     method: "DELETE"
   });
