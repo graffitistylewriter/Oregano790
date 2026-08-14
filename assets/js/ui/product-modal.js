@@ -6,7 +6,6 @@ DEV-007 PRODUCT MODAL
 
 const OreganoProductModal = (() => {
     const catalogueService = () => window.OreganoCatalogueService;
-    const productService = () => window.OreganoProductService;
 
     let modal = null;
     let previousFocus = null;
@@ -87,15 +86,13 @@ const OreganoProductModal = (() => {
     const findProduct = async (card) => {
         const productId = card?.querySelector(".quick-view")?.dataset?.productId;
         const service = catalogueService();
-        if (productId && service?.getById) return service.getById(productId);
+        if (!service) return null;
+        if (productId) return service.getById(productId);
+
         const name = card?.querySelector("h3")?.textContent?.trim();
         if (!name) return null;
-        if (service) {
-            const matches = await service.list({ search: name });
-            return matches.find(product => String(product.name).trim().toLowerCase() === name.toLowerCase()) || matches[0] || null;
-        }
-        const fallback = productService();
-        return fallback?.getProductById(productId) || fallback?.getProducts().find(product => String(product.name).trim().toLowerCase() === name.toLowerCase()) || null;
+        const matches = await service.list({ search: name });
+        return matches.find(product => String(product.name).trim().toLowerCase() === name.toLowerCase()) || matches[0] || null;
     };
 
     const renderProduct = product => {
