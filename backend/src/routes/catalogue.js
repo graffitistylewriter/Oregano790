@@ -1,6 +1,31 @@
 import { catalogueRepository as defaultCatalogueRepository } from "../catalogue.js";
 import { requireAdmin } from "../auth/admin-auth.js";
 
+const PUBLIC_PRODUCT_FIELDS = [
+    "id",
+    "sku",
+    "name",
+    "type",
+    "category",
+    "description",
+    "price",
+    "stock",
+    "featured",
+    "thc",
+    "cbd",
+    "image"
+];
+
+const toPublicProduct = product => {
+    if (!product || typeof product !== "object") return null;
+
+    return Object.fromEntries(
+        PUBLIC_PRODUCT_FIELDS
+            .filter(field => Object.prototype.hasOwnProperty.call(product, field))
+            .map(field => [field, product[field]])
+    );
+};
+
 const send = (res, status, body) => {
     res.writeHead(status);
     res.end(JSON.stringify(body));
@@ -29,10 +54,14 @@ export const catalogueRoute = async (req, res, { catalogueRepository = defaultCa
             if (id) {
                 const product = await catalogueRepository.getById(id);
                 return product
-                    ? send(res, 200, { product })
+                    ? send(res, 200, { product: toPublicProduct(product) })
                     : send(res, 404, { error: "Product not found" });
             }
-            return send(res, 200, { products: await catalogueRepository.list() });
+
+            const products = await catalogueRepository.list();
+            return send(res, 200, {
+                products: products.map(toPublicProduct)
+            });
         }
 
         if (!requireAdmin(req, res)) return;
