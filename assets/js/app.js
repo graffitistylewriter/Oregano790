@@ -56,7 +56,9 @@ const OreganoApp = (() => {
     return Object.freeze({
         version: "0.1.0-dev.001",
         services: {
-            products: window.OreganoProductService
+            get products() {
+                return window.OreganoProductService;
+            }
         },
         state: Object.freeze({ get: getState, set: setState, on, emit }),
         ready
