@@ -28,14 +28,14 @@ const request = async (path, { token, method = "GET", body } = {}) => {
 export const listProducts = token => request("/catalogue", { token });
 
 export const fetchCatalogue = async ({ token = "", id = "", search = "", category = "", type = "" } = {}) => {
-  const params = new URLSearchParams();
-  if (id) params.set("id", id);
-
-  const data = await listProducts(token);
-  let products = Array.isArray(data.products) ? data.products : [];
+  let products;
 
   if (id) {
-    products = products.filter(product => String(product.id) === String(id));
+    const data = await request(`/catalogue?id=${encodeURIComponent(id)}`, { token });
+    products = data.product ? [data.product] : [];
+  } else {
+    const data = await listProducts(token);
+    products = Array.isArray(data.products) ? data.products : [];
   }
 
   const normalizedSearch = String(search || "").trim().toLowerCase();
