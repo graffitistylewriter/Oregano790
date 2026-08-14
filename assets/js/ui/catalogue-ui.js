@@ -1,7 +1,7 @@
 /*=========================================================
 OREGANO 790
 CATALOGUE UI
-DEV-028 FRONTEND CATALOGUE INTEGRATION
+DEV-037 CATALOGUE UI REQUEST STATE
 =========================================================*/
 
 const escapeHtml = value => String(value ?? "")
@@ -18,6 +18,14 @@ export const getFilterParams = filter => {
     if (normalized === "Indoor") return { category: "Indoor Flower" };
     return { type: normalized };
 };
+
+export const getCatalogueQuery = (filter = "All", search = "") => ({
+    ...getFilterParams(filter),
+    search: String(search || "").trim()
+});
+
+export const shouldApplyCatalogueResponse = (requestId, latestRequestId) =>
+    requestId === latestRequestId;
 
 export const createProductCardMarkup = (product, index = 0) => {
     const imageSource = typeof product?.image === "string"
@@ -101,6 +109,8 @@ const init = () => {
     const grid = document.querySelector(".catalogue-grid");
     const toolbar = document.querySelector(".catalogue-toolbar");
     const resultLabel = toolbar?.querySelector(".catalogue-results");
+    const searchInput = toolbar?.querySelector(".catalogue-search")
+        || toolbar?.querySelector('input[type="search"]');
     const chips = [...document.querySelectorAll(".filter-chip")];
     const service = getCatalogueService();
 
@@ -108,7 +118,8 @@ const init = () => {
 
     let activeFilter = "All";
     let activeSearch = "";
-    let loading = false;
+    let latestRequestId = 0;
+    let searchTimer = null;
 
     const updateResultLabel = count => {
         if (resultLabel) {
@@ -116,21 +127,29 @@ const init = () => {
         }
     };
 
-    const load = async () => {
-        if (loading) return;
-        loading = true;
-        grid.setAttribute("aria-busy", "true");
+    const setLoading = isLoading => {
+        grid.setAttribute("aria-busy", String(isLoading));
+        grid.classList.toggle("catalogue-loading", isLoading);
+    };
 
-        const params = getFilterParams(activeFilter);
+    const load = async () => {
+        const requestId = ++latestRequestId;
+        setLoading(true);
+
         try {
-            const products = await service.list({ ...params, search: activeSearch });
-            renderProducts(grid, products);
-            updateResultLabel(products.length);
+            const products = await service.list(getCatalogueQuery(activeFilter, activeSearch));
+            if (!shouldApplyCatalogueResponse(requestId, latestRequestId)) return;
+
+            const safeProducts = Array.isArray(products) ? products : [];
+            renderProducts(grid, safeProducts);
+            updateResultLabel(safeProducts.length);
         } catch (error) {
+            if (!shouldApplyCatalogueResponse(requestId, latestRequestId)) return;
             console.warn("OREGANO 790 — API catalogue unavailable; preserving static catalogue.", error);
         } finally {
-            loading = false;
-            grid.removeAttribute("aria-busy");
+            if (shouldApplyCatalogueResponse(requestId, latestRequestId)) {
+                setLoading(false);
+            }
         }
     };
 
@@ -142,6 +161,14 @@ const init = () => {
             load();
         });
     });
+
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            activeSearch = searchInput.value || "";
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(load, 180);
+        });
+    }
 
     if (getConfig().apiBackedCatalogue === true) load();
 };
