@@ -39,17 +39,26 @@ let requests;
 beforeEach(() => {
     requests = [];
     globalThis.fetch = async (url, options = {}) => {
-        requests.push({ url: String(url), options });
+        const requestUrl = new URL(String(url));
+        requests.push({ url: requestUrl.toString(), options });
 
-        if (String(url).endsWith("/catalogue")) {
+        if (requestUrl.pathname === "/api/v1/catalogue") {
             if (options.method === "POST") {
                 return jsonResponse({ product: options.body ? JSON.parse(options.body) : null });
+            }
+
+            const id = requestUrl.searchParams.get("id");
+            if (id) {
+                const product = products.find(item => item.id === id);
+                return product
+                    ? jsonResponse({ product })
+                    : jsonResponse({ error: "Product not found" }, 404);
             }
 
             return jsonResponse({ products });
         }
 
-        if (String(url).includes("/catalogue/")) {
+        if (requestUrl.pathname.startsWith("/api/v1/catalogue/")) {
             return jsonResponse({ product: products[0] });
         }
 
