@@ -1,7 +1,7 @@
 /*=========================================================
 OREGANO 790
 FRONTEND BOOTSTRAP
-DEV-034 CATALOGUE UI BOOTSTRAP
+DEV-038 RUNTIME BOOTSTRAP HARDENING
 =========================================================*/
 
 (() => {
@@ -46,7 +46,7 @@ DEV-034 CATALOGUE UI BOOTSTRAP
             await import("./services/product-service.js");
             await loadScript("assets/js/services/catalogue-service.js");
             await import("./ui/catalogue-ui.js");
-            await loadScript("assets/js/ui/product-modal.js");
+            await loadScript("./ui/product-modal.js");
 
             window.OreganoCatalogueUI?.init();
             window.OreganoProductModal?.init();
@@ -55,9 +55,17 @@ DEV-034 CATALOGUE UI BOOTSTRAP
         }
     };
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", boot, { once: true });
-    } else {
-        boot();
-    }
+    import("./runtime/bootstrap-guard.js")
+        .then(({ createBootstrapGuard }) => {
+            const guardedBoot = createBootstrapGuard(boot);
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", () => guardedBoot(window), { once: true });
+            } else {
+                guardedBoot(window);
+            }
+        })
+        .catch(error => {
+            console.error("OREGANO 790 — Bootstrap guard failed:", error);
+        });
 })();
