@@ -1,7 +1,7 @@
 /*=========================================================
 OREGANO 790
 FRONTEND BOOTSTRAP
-DEV-032 FRONTEND RUNTIME LOADER
+DEV-032 SERVICE MODULE LOADER
 =========================================================*/
 
 (() => {
@@ -42,30 +42,13 @@ DEV-032 FRONTEND RUNTIME LOADER
 
     const boot = async () => {
         try {
-            /* Config is loaded first so every service shares one API boundary. */
             await loadScript("assets/js/config/app-config.js");
-
-            /* Product service is ESM and publishes its compatibility global on window. */
             await import("./services/product-service.js");
-
-            /* Application runtime owns page-level interaction behavior. */
-            await loadScript("assets/js/app.js");
-
-            /* Service/UI modules consume the canonical product service global. */
             await loadScript("assets/js/services/catalogue-service.js");
             await loadScript("assets/js/ui/product-modal.js");
-
             window.OreganoProductModal?.init();
-
-            document.body.classList.add("loaded");
-
-            if (window.OreganoApp) {
-                window.OreganoApp.state.set({ ready: true });
-                window.OreganoApp.ready();
-            }
         } catch (error) {
-            console.error("OREGANO 790 — Frontend bootstrap failed:", error);
-            document.body.classList.add("loaded");
+            console.error("OREGANO 790 — Service module bootstrap failed:", error);
         }
     };
 
