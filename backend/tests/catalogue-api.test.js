@@ -18,7 +18,8 @@ const catalogueRepository = createCatalogueRepository({
             description: "Test product",
             price: 100,
             stock: 5,
-            featured: false
+            featured: false,
+            internalNotes: "Do not expose this field"
         }
     ]
 });
@@ -42,7 +43,8 @@ before(async () => {
             description: "Test product",
             price: 100,
             stock: 5,
-            featured: false
+            featured: false,
+            internalNotes: "Do not expose this field"
         }
     ]);
     await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
@@ -53,19 +55,25 @@ after(async () => {
     server.close();
 });
 
-test("GET catalogue returns products", async () => {
+test("GET catalogue returns public product projection", async () => {
     const response = await fetch(`${baseUrl}/api/v1/catalogue`);
     assert.equal(response.status, 200);
     const body = await response.json();
     assert.equal(body.products.length, 1);
     assert.equal(body.products[0].id, "test-001");
+    assert.equal(body.products[0].sku, "TEST-001");
+    assert.equal(body.products[0].price, 100);
+    assert.equal(body.products[0].stock, 5);
+    assert.equal("internalNotes" in body.products[0], false);
 });
 
-test("GET catalogue by id returns one product", async () => {
+test("GET catalogue by id returns public product projection", async () => {
     const response = await fetch(`${baseUrl}/api/v1/catalogue?id=test-001`);
     assert.equal(response.status, 200);
     const body = await response.json();
     assert.equal(body.product.sku, "TEST-001");
+    assert.equal(body.product.name, "Test Strain");
+    assert.equal("internalNotes" in body.product, false);
 });
 
 test("POST catalogue creates a product", async () => {
@@ -102,4 +110,13 @@ test("DELETE catalogue removes a product", async () => {
 
     const missing = await fetch(`${baseUrl}/api/v1/catalogue?id=test-002`);
     assert.equal(missing.status, 404);
+});
+
+test("catalogue writes require admin authentication", async () => {
+    const response = await fetch(`${baseUrl}/api/v1/catalogue`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "Unauthorized", sku: "UNAUTH-001" })
+    });
+    assert.equal(response.status, 401);
 });
