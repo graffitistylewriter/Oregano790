@@ -10,6 +10,14 @@ const getCataloguePath = () => {
     : `/${configuredPath}`;
 };
 
+const apiBackedCatalogueEnabled = () => window?.OreganoConfig?.features?.apiBackedCatalogue === true;
+const catalogueFallbackEnabled = () => window?.OreganoConfig?.features?.catalogueApiFallback !== false;
+
+const getLegacyProducts = () => {
+  const products = window?.oreganoProducts;
+  return Array.isArray(products) ? products.map(product => ({ ...product })) : [];
+};
+
 const request = async (path, { token, method = "GET", body } = {}) => {
   const headers = {};
   if (token) headers.Authorization = `Bearer ${token}`;
@@ -35,14 +43,36 @@ const request = async (path, { token, method = "GET", body } = {}) => {
   return data;
 };
 
-export const listProducts = token => request(getCataloguePath(), { token });
+const listProductsFromFallback = () => ({ products: getLegacyProducts() });
+
+export const listProducts = async token => {
+  if (!apiBackedCatalogueEnabled() && catalogueFallbackEnabled()) {
+    return listProductsFromFallback();
+  }
+
+  try {
+    return await request(getCataloguePath(), { token });
+  } catch (error) {
+    if (!catalogueFallbackEnabled()) throw error;
+    return listProductsFromFallback();
+  }
+};
 
 export const fetchCatalogue = async ({ token = "", id = "", search = "", category = "", type = "" } = {}) => {
   let products;
 
   if (id) {
-    const data = await request(`${getCataloguePath()}?id=${encodeURIComponent(id)}`, { token });
-    products = data.product ? [data.product] : [];
+    if (!apiBackedCatalogueEnabled() && catalogueFallbackEnabled()) {
+      products = getLegacyProducts().filter(product => String(product.id) === String(id));
+    } else {
+      try {
+        const data = await request(`${getCataloguePath()}?id=${encodeURIComponent(id)}`, { token });
+        products = data.product ? [data.product] : [];
+      } catch (error) {
+        if (!catalogueFallbackEnabled()) throw error;
+        products = getLegacyProducts().filter(product => String(product.id) === String(id));
+      }
+    }
   } else {
     const data = await listProducts(token);
     products = Array.isArray(data.products) ? data.products : [];
