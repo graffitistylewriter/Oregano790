@@ -1,12 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const previousWindow = globalThis.window;
-
-globalThis.window = {};
-
-const source = await import("fs").then(fs => fs.readFileSync("./assets/js/app.js", "utf8"));
-
+const source = readFileSync(new URL("../js/app.js", import.meta.url), "utf8");
 
 test("application service boundary resolves the product service lazily", () => {
     assert.match(source, /get products\(\)/);
@@ -14,9 +10,8 @@ test("application service boundary resolves the product service lazily", () => {
     assert.doesNotMatch(source, /products:\s*window\.OreganoProductService\s*,/);
 });
 
-test("application service boundary does not require the product service during construction", () => {
-    assert.equal(globalThis.window.OreganoProductService, undefined);
-    assert.match(source, /services:\s*\{[\s\S]*get products\(\)/);
+test("application service boundary does not eagerly read the product service", () => {
+    const serviceBlock = source.match(/services:\s*\{([\s\S]*?)\n\s*\},\n\s*state:/)?.[1] || "";
+    assert.match(serviceBlock, /get products\(\)/);
+    assert.doesNotMatch(serviceBlock, /products\s*:\s*window\.OreganoProductService/);
 });
-
-globalThis.window = previousWindow;
