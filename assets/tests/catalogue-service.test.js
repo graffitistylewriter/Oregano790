@@ -33,13 +33,15 @@ globalThis.window = {
     }
 };
 
-const service = await import("../js/services/catalogue-service.js");
+await import("../js/services/catalogue-service.js");
 
 beforeEach(() => calls.length = 0);
 
 test("catalogue list defaults to the complete catalogue", async () => {
-    const result = await service.default;
-    assert.fail(`Unexpected default export: ${result}`);
+    const result = await window.OreganoCatalogueService.list();
+
+    assert.deepEqual(result, products);
+    assert.deepEqual(calls[0], { token: "", search: "" });
 });
 
 test("catalogue list translates Indoor into the canonical category", async () => {
