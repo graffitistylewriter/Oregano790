@@ -9,7 +9,7 @@ DEV-032 FRONTEND RUNTIME LOADER
 
     const loadedScripts = new Map();
 
-    const loadScript = (src, { module = false } = {}) => {
+    const loadScript = (src) => {
         if (loadedScripts.has(src)) return loadedScripts.get(src);
 
         const promise = new Promise((resolve, reject) => {
@@ -28,7 +28,6 @@ DEV-032 FRONTEND RUNTIME LOADER
             script.src = src;
             script.dataset.oreganoSrc = src;
             script.async = false;
-            if (module) script.type = "module";
             script.addEventListener("load", () => {
                 script.dataset.oreganoLoaded = "true";
                 resolve();
@@ -43,20 +42,20 @@ DEV-032 FRONTEND RUNTIME LOADER
 
     const boot = async () => {
         try {
-            /* Config is intentionally loaded first so every service shares one API boundary. */
+            /* Config is loaded first so every service shares one API boundary. */
             await loadScript("assets/js/config/app-config.js");
 
             /* Product service is ESM and publishes its compatibility global on window. */
             await import("./services/product-service.js");
 
-            /* Legacy-compatible modules consume the service global. */
+            /* Application runtime owns page-level interaction behavior. */
             await loadScript("assets/js/app.js");
+
+            /* Service/UI modules consume the canonical product service global. */
             await loadScript("assets/js/services/catalogue-service.js");
             await loadScript("assets/js/ui/product-modal.js");
-            await loadScript("assets/js/ui/catalogue-ui.js");
 
             window.OreganoProductModal?.init();
-            window.OreganoCatalogueUI?.init();
 
             document.body.classList.add("loaded");
 
