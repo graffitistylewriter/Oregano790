@@ -10,8 +10,7 @@ test("application service boundary resolves the product service lazily", () => {
     assert.doesNotMatch(source, /products:\s*window\.OreganoProductService\s*,/);
 });
 
-test("application service boundary does not eagerly read the product service", () => {
-    const serviceBlock = source.match(/services:\s*\{([\s\S]*?)\n\s*\},\n\s*state:/)?.[1] || "";
-    assert.match(serviceBlock, /get products\(\)/);
-    assert.doesNotMatch(serviceBlock, /products\s*:\s*window\.OreganoProductService/);
+test("application service boundary does not require the product service during construction", () => {
+    assert.match(source, /services:\s*\{[\s\S]*get products\(\)/);
+    assert.doesNotMatch(source, /services:\s*\{[\s\S]*products\s*:\s*window\.OreganoProductService/);
 });
