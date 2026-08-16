@@ -43,7 +43,7 @@ export const createProductCardMarkup = (product, index = 0) => {
 
     const price = Number(product?.price);
     const priceLabel = Number.isFinite(price)
-        ? `R${price.toLocaleString("en-ZA")}`
+        ? `R${price.toLocaleString("en-US")}`
         : "Price on request";
 
     const meta = [
