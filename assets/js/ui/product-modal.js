@@ -20,7 +20,7 @@ const OreganoProductModal = (() => {
 
     const formatPrice = (value) => {
         const price = Number(value);
-        return Number.isFinite(price) ? `R${price.toLocaleString("en-ZA")}` : "Price on request";
+        return Number.isFinite(price) ? `R${price.toLocaleString("en-US")}` : "Price on request";
     };
 
     const injectStyles = () => {
