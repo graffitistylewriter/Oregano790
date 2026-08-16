@@ -46,7 +46,7 @@ DEV-038 RUNTIME BOOTSTRAP HARDENING
             await import("./services/product-service.js");
             await loadScript("assets/js/services/catalogue-service.js");
             await import("./ui/catalogue-ui.js");
-            await loadScript("./ui/product-modal.js");
+            await loadScript("assets/js/ui/product-modal.js");
 
             window.OreganoCatalogueUI?.init();
             window.OreganoProductModal?.init();
