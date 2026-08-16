@@ -39,7 +39,7 @@ test("catalogue UI loads when either API mode or fallback mode is enabled", () =
 
 test("catalogue UI source keeps the presentation fallback path enabled", () => {
     assert.match(source, /catalogueApiFallback/);
-    assert.match(source, /shouldLoadCatalogue\(getConfig\(\)\)\s*load\(\)/);
+    assert.match(source, /if \(shouldLoadCatalogue\(getConfig\(\)\)\)\s*load\(\);/);
 });
 
 test("product card markup escapes product-controlled values", () => {
